@@ -1,0 +1,75 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block principal %}
+<title>Ingredientes Registrados</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/ingredientes_registrados.css' %}">
+
+<div class="row titulo">
+	<h1>Ingredientes Registrados</h1>
+</div>
+<br>
+
+<form method="post" novalidate>
+	{% csrf_token %}
+	<div class="row">
+		<div class="col-4">
+		{{ formFiltro.f_nomeIng|bootstrap }}
+		</div>
+		<div class="col-4">
+		{{ formFiltro.f_origemDosDados|bootstrap }}
+		</div>
+		<div class="col-4">
+		{{ formFiltro.f_autorIng|bootstrap }}
+		</div>
+		<div class="col-4">
+		<button type="submit" class="btn btn-secondary">Filtrar</button>
+		</div>
+	</div>
+</form>
+
+<table class="table table-striped mb-0" style="max-height: 350px; overflow-y: auto; display: block;">
+	<thead>
+		<tr style=" background-color: rgba(103, 172, 107, 0.342);text-align: center">
+			<th style="width:30%;">Ingrediente</th>
+			<th>Origem</th>
+			<th>Criado em</th>
+			<th>Autor</th>
+			<th style="width:10%;">Editar</th>
+			<th style="width:10%;">Excluir</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for ingrediente in ingredientes %}
+		<tr>
+			<td class="filterable-cell" style="width:30%;">{{ ingrediente.nomeIng }}</td>
+			<td class="filterable-cell" style="text-align:center">{{ ingrediente.origemDosDados }}</td>
+      <td class="filterable-cell" style="text-align:center">
+        {% if ingrediente.dataCriacao.day < 10 %}0{% endif %}{{ ingrediente.dataCriacao.day }}/{% if ingrediente.dataCriacao.month < 10 %}0{% endif %}{{ ingrediente.dataCriacao.month }}/{{ ingrediente.dataCriacao.year }}
+      </td>
+			<td class="filterable-cell" style="padding-left: 1.4%;text-align:center">{{ ingrediente.autorIng }}</td>
+			<td class="filterable-cell" style="width:10%;text-align:center">
+					<button type="button" class="btn btn-default" aria-label="Left Align" onclick="location.href = '{% url 'editarIngrediente' ingrediente.pk %}'">
+						<i class="fa fa-pencil" aria-hidden="true"></i>
+					</button></td>
+			<td class="filterable-cell" style="width:10%;text-align:center">		
+					<form action="{% url 'deletarIngrediente' ingrediente.pk %}" method="POST" style="display:inline"> {% csrf_token %}
+						<button type="submit" class="btn btn-default" aria-label="Left Align" onclick="return confirm('Tem certeza que quer excluir o ingrediente?');">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+						</button>
+					</form>
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+	<div class="row ">
+		<div class="col-4">
+			<button class="btn btn-outline-secondary btn-lg" style="width: 180px; height: 100%;" type="button" onclick="location.href = '{% url 'registrarIngrediente' %}'">Registrar Ingrediente</button>
+		</div>
+	</div>
+</form>
+{% endblock %}

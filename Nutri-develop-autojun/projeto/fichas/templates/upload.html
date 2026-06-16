@@ -1,0 +1,32 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block principal %}
+<title>Upload</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/upload.css' %}">
+
+
+
+<div class="titulo">
+    <h1>Upload de Ingredientes</h1>
+</div>
+<br>
+
+<div style="margin-left:7%;">
+    {% if messages %}
+        {%for message in messages%}
+        <div>
+            <strong>{{ message|safe}}</strong>
+        </div>
+        {% endfor %}
+    {% else %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label>Upload a File</label>
+            <input type = 'file' name ='files'>
+            <button type = 'submit'>Upload</button>
+        </form>
+    {% endif %}
+</div>
+    
+{% endblock %}

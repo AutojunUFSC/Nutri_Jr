@@ -1,0 +1,520 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% load trunca_numeros %}
+{% block principal %}
+<title>Receita</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/receita.css' %}">
+
+<div class="progress progresso">
+	<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+</div>
+<br>
+		
+<div class="tituloo">
+	<h1>Receita: <b style="font-size: 20px;">{{ fichaAtual.nomeFicha }}</b></h1>
+</div><br><br>
+
+
+<div class="dados">
+	<h4 style="margin-bottom: 0%;">Dados Gerais: </h4>
+	<hr>
+</div>
+
+<div class="dados">
+	<div class="row ml-0">
+		<div class="col-md-6 pl-0">
+			Peso Liquido Preparação (g): <b>{{ fichaAtual.pesoTotalPreparacao }}</b><br>
+			Peso Total Preparação (g): <b>{{ fichaAtual.pesoTotal }}</b><br>
+			Peso Total Porção (g) - Cliente: <b>{{ fichaAtual.pesoPorcao }}</b><br>
+			Peso Total Porção (g) - Anvisa: <b>{{ fichaAtual.pesoAnvisa }}</b>
+		</div>
+		<div class="col-md-6">
+			Número de Porções: <b>{{ fichaAtual.numPorcoes }}</b><br>
+	[ Peso Total ({{ fichaAtual.pesoTotal }}) / Peso P/ Porcao ({{ fichaAtual.pesoPorcao }}) ]<br>
+		</div>
+	</div>
+</div>
+<br>
+
+
+<div class="dados">
+	<h4 style="margin-bottom: 0%;">Receita:</h4>
+	<hr>
+</div>
+
+<div>		
+	<table class="table table-striped">
+		<thead>
+			<tr style=" background-color: rgba(103, 172, 107, 0.342);">
+				<th style="width:20%;">Ingredientes</th>
+				<th style="width:17%;">Nome Fantasia</th>
+				<th style="width:16%;">Peso Bruto</th>
+				<th style="width:16%;">Peso Líquido</th>
+				<th style="width:17%;">Medida Caseira</th>
+				<th style="width:8%;">Editar</th>
+				<th style="width:5%;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></th>
+			</tr>
+		</thead>
+		<tbody>
+				{% for itemReceita in itensReceita %}
+			<tr>
+				<td class="filterable-cell" style="width:20%;"><a href="{% url 'editarIngrediente' itemReceita.ingrediente.pk %}" target="_blank">{{ itemReceita.ingrediente.nomeIng }}</a></td>
+				<td class="filterable-cell" style="width:17%;">{{ itemReceita.nomeFantasia }}</td>
+				<td class="filterable-cell" style="width:16%;">{{ itemReceita.pesoBruto }}</td>
+				<td class="filterable-cell" style="width:16%;">{{ itemReceita.pesoLiquido }}{{ itemReceita.unidade }}</td>
+				<td class="filterable-cell" style="width:17%;">{{ itemReceita.medidaCaseira }}</td>
+				<td class="filterable-cell" style="width:8%;"><a href="{% url 'editarItemReceita' fichaAtual.pk itemReceita.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+				<td class="filterable-cell" style="width:5%;"><a href="{% url 'deletarItemReceita' fichaAtual.pk itemReceita.id %}">X</a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="dados">
+			OBS: Não é possível apagar um ingrediente se ele for o único restante na receita
+	</div>
+	
+</div>
+<br><br>
+
+<form class="align-self-center" action="" method="POST" novalidate>
+	{% csrf_token %}
+	<div class="row ">
+		<div class="col-10">
+      
+      {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+      <label class="control-label" for="ingExtra">Ingrediente:</label>
+      <input class="form-control" type="text" name="ingExtra" id="ingExtra" list="listaIngredientes" autocomplete="off">  
+      <datalist id="listaIngredientes">
+        {% for ingrediente in ingredientes %}
+        <option value="{{ ingrediente.nomeIng }}">
+        {% endfor %}
+      </datalist>
+
+			{{ formReceita.nomeFantasia|bootstrap }}
+			{{ formReceita.pesoBruto|bootstrap }} *Em gramas
+			{{ formReceita.pesoLiquido|bootstrap }}
+      		{{ formReceita.medidaCaseira|bootstrap }}	
+			<button class="btn btn-outline-secondary btn-lg" type="submit">Adicionar</button><br><br>
+		</div>
+	</div>
+	<div class="dados">
+		<a href="{% url 'registrarIngrediente' %}" target="_blank">Cadastrar novo ingrediente</a><br>
+		*Atualize a página após o cadastro
+	</div>
+</form>
+		
+
+ <br><br><br>
+<div class="dados">
+	<h4>Pré-visualização:</h4>{{ tabelaNutricional }}<br>
+	<hr>
+</div>
+
+
+<div>		
+	<table class="table table-striped">
+		<thead>
+			<tr style=" background-color: rgba(103, 172, 107, 0.342);">
+				<th >Item</th>
+				<th>Quantidade Real</th>
+				<th>Quantidade p/ 100g</th>
+				<th>Quantidade p/ Porcao</th>
+				<th>Quantidade Arredondada</th>
+				<th>Valor Diário (%)</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td >Proteinas ({{ tabelaNutricional.proteinas_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.proteinas %}</td>
+				<td>{% truncar tabelaNutricional.proteinas_100g %}</td>
+				<td>{% truncar tabelaNutricional.proteinas_Porcao %}</td>
+				<td>{{ tabelaNutricional.proteinas_Arred }}</td>
+				<td >{{ tabelaNutricional.proteinas_VD }}</td>
+			</tr>
+			<tr>
+				<td>Gorduras Totais ({{ tabelaNutricional.gordTotais_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.gordTotais %}</td>
+				<td>{% truncar tabelaNutricional.gordTotais_100g %}</td>
+				<td>{% truncar tabelaNutricional.gordTotais_Porcao %}</td>
+				<td>{{ tabelaNutricional.gordTotais_Arred }}</td>
+				<td >{{ tabelaNutricional.gordTotais_VD }}</td>
+			</tr>
+			<tr>
+				<td>Carboidratos ({{ tabelaNutricional.carboidratos_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.carboidratos %}</td>
+				<td>{% truncar tabelaNutricional.carboidratos_100g %}</td>
+				<td>{% truncar tabelaNutricional.carboidratos_Porcao %}</td>
+				<td>{{ tabelaNutricional.carboidratos_Arred }}</td>
+				<td >{{ tabelaNutricional.carboidratos_VD }}</td>
+			</tr>
+			<tr>
+				<td>Fibras ({{ tabelaNutricional.fibras_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.fibras %}</td>
+				<td>{% truncar tabelaNutricional.fibras_100g %}</td>
+				<td>{% truncar tabelaNutricional.fibras_Porcao %}</td>
+				<td>{{ tabelaNutricional.fibras_Arred }}</td>
+				<td >{{ tabelaNutricional.fibras_VD }}</td>
+			</tr>
+			<tr>
+				<td>Energia ({{ tabelaNutricional.energiakcal_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.energiakcal %}</td>
+				<td>{% truncar tabelaNutricional.energiakcal_100g %}</td>
+				<td>{% truncar tabelaNutricional.energiakcal_Porcao %}</td>
+				<td>{{ tabelaNutricional.energiakcal_Arred }}</td>
+				<td >{{ tabelaNutricional.energiakcal_VD }}</td>
+			</tr>
+			<tr>
+				<td>Energia ({{ tabelaNutricional.energiaKJ_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.energiaKJ %}</td>
+				<td>{% truncar tabelaNutricional.energiaKJ_100g %}</td>
+				<td>{% truncar tabelaNutricional.energiaKJ_Porcao %}</td>
+				<td>{{ tabelaNutricional.energiaKJ_Arred }}</td>
+				<td >{{ tabelaNutricional.energiaKJ_VD }}</td>
+			</tr>
+			<tr>
+				<td>Cálcio ({{ tabelaNutricional.calcio_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.calcio %}</td>
+				<td>{% truncar tabelaNutricional.calcio_100g %}</td>
+				<td>{% truncar tabelaNutricional.calcio_Porcao %}</td>
+				<td>{{ tabelaNutricional.calcio_Arred }}</td>
+				<td >{{ tabelaNutricional.calcio_VD }}</td>
+			</tr>
+			<tr>
+				<td>Ferro ({{ tabelaNutricional.ferro_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.ferro %}</td>
+				<td>{% truncar tabelaNutricional.ferro_100g %}</td>
+				<td>{% truncar tabelaNutricional.ferro_Porcao %}</td>
+				<td>{{ tabelaNutricional.ferro_Arred }}</td>
+				<td >{{ tabelaNutricional.ferro_VD }}</td>
+			</tr>
+			<tr>
+				<td>Magnésio ({{ tabelaNutricional.magnesio_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.magnesio %}</td>
+				<td>{% truncar tabelaNutricional.magnesio_100g %}</td>
+				<td>{% truncar tabelaNutricional.magnesio_Porcao %}</td>
+				<td>{{ tabelaNutricional.magnesio_Arred }}</td>
+				<td >{{ tabelaNutricional.magnesio_VD }}</td>
+			</tr>
+			<tr>
+				<td>Fósforo ({{ tabelaNutricional.fosforo_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.fosforo %}</td>
+				<td>{% truncar tabelaNutricional.fosforo_100g %}</td>
+				<td>{% truncar tabelaNutricional.fosforo_Porcao %}</td>
+				<td>{{ tabelaNutricional.fosforo_Arred }}</td>
+				<td >{{ tabelaNutricional.fosforo_VD }}</td>
+			</tr>
+			<tr>
+				<td>Potássio ({{ tabelaNutricional.potassio_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.potassio %}</td>
+				<td>{% truncar tabelaNutricional.potassio_100g %}</td>
+				<td>{% truncar tabelaNutricional.potassio_Porcao %}</td>
+				<td>{{ tabelaNutricional.potassio_Arred }}</td>
+				<td >{{ tabelaNutricional.potassio_VD }}</td>
+			</tr>
+			<tr>
+				<td>Sódio ({{ tabelaNutricional.sodio_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.sodio %}</td>
+				<td>{% truncar tabelaNutricional.sodio_100g %}</td>
+				<td>{% truncar tabelaNutricional.sodio_Porcao %}</td>
+				<td>{{ tabelaNutricional.sodio_Arred }}</td>
+				<td >{{ tabelaNutricional.sodio_VD }}</td>
+			</tr>
+			<tr>
+				<td>Zinco ({{ tabelaNutricional.zinco_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.zinco %}</td>
+				<td>{% truncar tabelaNutricional.zinco_100g %}</td>
+				<td>{% truncar tabelaNutricional.zinco_Porcao %}</td>
+				<td>{{ tabelaNutricional.zinco_Arred }}</td>
+				<td >{{ tabelaNutricional.zinco_VD }}</td>
+			</tr>
+			<tr>
+				<td>Cobre ({{ tabelaNutricional.cobra_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.cobre %}</td>
+				<td>{% truncar tabelaNutricional.cobre_100g %}</td>
+				<td>{% truncar tabelaNutricional.cobre_Porcao %}</td>
+				<td>{{ tabelaNutricional.cobre_Arred }}</td>
+				<td >{{ tabelaNutricional.cobre_VD }}</td>
+			</tr>
+			<tr>
+				<td>Manganês ({{ tabelaNutricional.manganes_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.manganes %}</td>
+				<td>{% truncar tabelaNutricional.manganes_100g %}</td>
+				<td>{% truncar tabelaNutricional.manganes_Porcao %}</td>
+				<td>{{ tabelaNutricional.manganes_Arred }}</td>
+				<td >{{ tabelaNutricional.manganes_VD }}</td>
+			</tr>
+			<tr>
+				<td>Retinol ({{ tabelaNutricional.retinol_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.retinol %}</td>
+				<td>{% truncar tabelaNutricional.retinol_100g %}</td>
+				<td>{% truncar tabelaNutricional.retinol_Porcao %}</td>
+				<td>{{ tabelaNutricional.retinol_Arred }}</td>
+				<td >{{ tabelaNutricional.retinol_VD }}</td>
+			</tr>
+			<tr>
+				<td>RE ({{ tabelaNutricional.RE_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.RE %}</td>
+				<td>{% truncar tabelaNutricional.RE_100g %}</td>
+				<td>{% truncar tabelaNutricional.RE_Porcao %}</td>
+				<td>{{ tabelaNutricional.RE_Arred }}</td>
+				<td >{{ tabelaNutricional.RE_VD }}</td>
+			</tr>
+			<tr>
+				<td>RAE ({{ tabelaNutricional.vitaminaARAE_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.vitaminaARAE %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaARAE_100g %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaARAE_Porcao %}</td>
+				<td>{{ tabelaNutricional.vitaminaARAE_Arred }}</td>
+				<td >{{ tabelaNutricional.vitaminaARAE_VD }}</td>
+			</tr>
+			<tr>
+				<td>Vitamina C ({{ tabelaNutricional.vitaminaC_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.vitaminaC %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaC_100g %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaC_Porcao %}</td>
+				<td>{{ tabelaNutricional.vitaminaC_Arred }}</td>
+				<td >{{ tabelaNutricional.vitaminaC_VD }}</td>
+			</tr>
+			<tr>
+				<td>Tiamina ({{ tabelaNutricional.tiamina_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.tiamina %}</td>
+				<td>{% truncar tabelaNutricional.tiamina_100g %}</td>
+				<td>{% truncar tabelaNutricional.tiamina_Porcao %}</td>
+				<td>{{ tabelaNutricional.tiamina_Arred }}</td>
+				<td >{{ tabelaNutricional.tiamina_VD }}</td>
+			</tr>
+			<tr>
+				<td>Riboflavina ({{ tabelaNutricional.riboflavina_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.riboflavina %}</td>
+				<td>{% truncar tabelaNutricional.riboflavina_100g %}</td>
+				<td>{% truncar tabelaNutricional.riboflavina_Porcao %}</td>
+				<td>{{ tabelaNutricional.riboflavina_Arred }}</td>
+				<td >{{ tabelaNutricional.riboflavina_VD }}</td>
+			</tr>
+			<tr>
+				<td>Niacina ({{ tabelaNutricional.niancina_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.niancina %}</td>
+				<td>{% truncar tabelaNutricional.niancina_100g %}</td>
+				<td>{% truncar tabelaNutricional.niancina_Porcao %}</td>
+				<td>{{ tabelaNutricional.niancina_Arred }}</td>
+				<td >{{ tabelaNutricional.niancina_VD }}</td>
+			</tr>
+			<tr>
+				<td>Vitamina Piridoxina - B6 ({{ tabelaNutricional.piridoxina_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.piridoxina %}</td>
+				<td>{% truncar tabelaNutricional.piridoxina_100g %}</td>
+				<td>{% truncar tabelaNutricional.piridoxina_Porcao %}</td>
+				<td>{{ tabelaNutricional.piridoxina_Arred }}</td>
+				<td >{{ tabelaNutricional.piridoxina_VD }}</td>
+			</tr>
+			<tr>
+				<td>Gorduras saturadas ({{ tabelaNutricional.gordSat_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.gordSat %}</td>
+				<td>{% truncar tabelaNutricional.gordSat_100g %}</td>
+				<td>{% truncar tabelaNutricional.gordSat_Porcao %}</td>
+				<td>{{ tabelaNutricional.gordSat_Arred }}</td>
+				<td >{{ tabelaNutricional.gordSat_VD }}</td>
+			</tr>
+			<tr>
+				<td>Gorduras trans ({{ tabelaNutricional.gordTrans_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.gordTrans %}</td>
+				<td>{% truncar tabelaNutricional.gordTrans_100g %}</td>
+				<td>{% truncar tabelaNutricional.gordTrans_Porcao %}</td>
+				<td>{{ tabelaNutricional.gordTrans_Arred }}</td>
+				<td >{{ tabelaNutricional.gordTrans_VD }}</td>
+			</tr>
+			<tr>
+				<td>Gorduras polinsaturadas ({{ tabelaNutricional.gordPoli_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.gordPoli %}</td>
+				<td>{% truncar tabelaNutricional.gordPoli_100g %}</td>
+				<td>{% truncar tabelaNutricional.gordPoli_Porcao %}</td>
+				<td>{{ tabelaNutricional.gordPoli_Arred }}</td>
+				<td >{{ tabelaNutricional.gordPoli_VD }}</td>
+			</tr>
+			<tr>
+				<td>Gorduras monoinsaturadas ({{ tabelaNutricional.gordMono_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.gordMono %}</td>
+				<td>{% truncar tabelaNutricional.gordMono_100g %}</td>
+				<td>{% truncar tabelaNutricional.gordMono_Porcao %}</td>
+				<td>{{ tabelaNutricional.gordMono_Arred }}</td>
+				<td >{{ tabelaNutricional.gordMono_VD }}</td>
+			</tr>
+			<tr>
+				<td>Colesterol ({{ tabelaNutricional.colesterol_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.colesterol %}</td>
+				<td>{% truncar tabelaNutricional.colesterol_100g %}</td>
+				<td>{% truncar tabelaNutricional.colesterol_Porcao %}</td>
+				<td>{{ tabelaNutricional.colesterol_Arred }}</td>
+				<td >{{ tabelaNutricional.colesterol_VD }}</td>
+			</tr>
+			<tr>
+				<td>Açúcares adicionais ({{ tabelaNutricional.acucaresadd_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.acucaresadd %}</td>
+				<td>{% truncar tabelaNutricional.acucaresadd_100g %}</td>
+				<td>{% truncar tabelaNutricional.acucaresadd_Porcao %}</td>
+				<td>{{ tabelaNutricional.acucaresadd_Arred }}</td>
+				<td >{{ tabelaNutricional.acucaresadd_VD }}</td>
+			</tr>
+			<tr>
+				<td>Açúcares Totais ({{ tabelaNutricional.acucaresTotais_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.acucaresTotais %}</td>
+				<td>{% truncar tabelaNutricional.acucaresTotais_100g %}</td>
+				<td>{% truncar tabelaNutricional.acucaresTotais_Porcao %}</td>
+				<td>{{ tabelaNutricional.acucaresTotais_Arred }}</td>
+				<td >{{ tabelaNutricional.acucaresTotais_VD }}</td>
+			</tr>
+			<tr>
+				<td>Omega 6 ({{ tabelaNutricional.omega6_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.omega6 %}</td>
+				<td>{% truncar tabelaNutricional.omega6_100g %}</td>
+				<td>{% truncar tabelaNutricional.omega6_Porcao %}</td>
+				<td>{{ tabelaNutricional.omega6_Arred }}</td>
+				<td >{{ tabelaNutricional.omega6_VD }}</td>
+			</tr>
+			<tr>
+				<td>Omega 3 ({{ tabelaNutricional.omega3_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.omega3 %}</td>
+				<td>{% truncar tabelaNutricional.omega3_100g %}</td>
+				<td>{% truncar tabelaNutricional.omega3_Porcao %}</td>
+				<td>{{ tabelaNutricional.omega3_Arred }}</td>
+				<td >{{ tabelaNutricional.omega3_VD }}</td>
+			</tr>
+			<tr>
+				<td>Vitamina D ({{ tabelaNutricional.vitaminaD_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.vitaminaD %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaD_100g %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaD_Porcao %}</td>
+				<td>{{ tabelaNutricional.vitaminaD_Arred }}</td>
+				<td >{{ tabelaNutricional.vitaminaD_VD }}</td>
+			</tr>
+			<tr>
+				<td>Vitamina E ({{ tabelaNutricional.vitaminaE_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.vitaminaE %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaE_100g %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaE_Porcao %}</td>
+				<td>{{ tabelaNutricional.vitaminaE_Arred }}</td>
+				<td >{{ tabelaNutricional.vitaminaE_VD }}</td>
+			</tr>
+			<tr>
+				<td>vitaminaK ({{ tabelaNutricional.vitaminaK_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.vitaminaK %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaK_100g %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaK_Porcao %}</td>
+				<td>{{ tabelaNutricional.vitaminaK_Arred }}</td>
+				<td >{{ tabelaNutricional.vitaminaK_VD }}</td>
+			</tr>
+			<tr>
+				<td>Biotina ({{ tabelaNutricional.biotina_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.biotina %}</td>
+				<td>{% truncar tabelaNutricional.biotina_100g %}</td>
+				<td>{% truncar tabelaNutricional.biotina_Porcao %}</td>
+				<td>{{ tabelaNutricional.biotina_Arred }}</td>
+				<td >{{ tabelaNutricional.biotina_VD }}</td>
+			</tr>
+			<tr>
+				<td>Acido folico ({{ tabelaNutricional.acidoFolico_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.acidoFolico %}</td>
+				<td>{% truncar tabelaNutricional.acidoFolico_100g %}</td>
+				<td>{% truncar tabelaNutricional.acidoFolico_Porcao %}</td>
+				<td>{{ tabelaNutricional.acidoFolico_Arred }}</td>
+				<td >{{ tabelaNutricional.acidoFolico_VD }}</td>
+			</tr>
+			<tr>
+				<td>Acido pantotenico ({{ tabelaNutricional.acidoPantotenico_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.acidoPantotenico %}</td>
+				<td>{% truncar tabelaNutricional.acidoPantotenico_100g %}</td>
+				<td>{% truncar tabelaNutricional.acidoPantotenico_Porcao %}</td>
+				<td>{{ tabelaNutricional.acidoPantotenico_Arred }}</td>
+				<td >{{ tabelaNutricional.acidoPantotenico_VD }}</td>
+			</tr>
+			<tr>
+				<td>Vitamina B12 ({{ tabelaNutricional.vitaminaB12_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.vitaminaB12 %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaB12_100g %}</td>
+				<td>{% truncar tabelaNutricional.vitaminaB12_Porcao %}</td>
+				<td>{{ tabelaNutricional.vitaminaB12_Arred }}</td>
+				<td >{{ tabelaNutricional.vitaminaB12_VD }}</td>
+			</tr>
+			<tr>
+				<td>Cloreto ({{ tabelaNutricional.cloreto_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.cloreto %}</td>
+				<td>{% truncar tabelaNutricional.cloreto_100g %}</td>
+				<td>{% truncar tabelaNutricional.cloreto_Porcao %}</td>
+				<td>{{ tabelaNutricional.cloreto_Arred }}</td>
+				<td >{{ tabelaNutricional.cloreto_VD }}</td>
+			</tr>
+			<tr>
+				<td>Cromo ({{ tabelaNutricional.cromo_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.cromo %}</td>
+				<td>{% truncar tabelaNutricional.cromo_100g %}</td>
+				<td>{% truncar tabelaNutricional.cromo_Porcao %}</td>
+				<td>{{ tabelaNutricional.cromo_Arred }}</td>
+				<td >{{ tabelaNutricional.cromo_VD }}</td>
+			</tr>
+			<tr>
+				<td>Fluor ({{ tabelaNutricional.fluor_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.fluor %}</td>
+				<td>{% truncar tabelaNutricional.fluor_100g %}</td>
+				<td>{% truncar tabelaNutricional.fluor_Porcao %}</td>
+				<td>{{ tabelaNutricional.fluor_Arred }}</td>
+				<td >{{ tabelaNutricional.fluor_VD }}</td>
+			</tr>
+			<tr>
+				<td>Iodo ({{ tabelaNutricional.iodo_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.iodo %}</td>
+				<td>{% truncar tabelaNutricional.iodo_100g %}</td>
+				<td>{% truncar tabelaNutricional.iodo_Porcao %}</td>
+				<td>{{ tabelaNutricional.iodo_Arred }}</td>
+				<td >{{ tabelaNutricional.iodo_VD }}</td>
+			</tr>
+			<tr>
+				<td>Molibdenio ({{ tabelaNutricional.molibdenio_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.molibdenio %}</td>
+				<td>{% truncar tabelaNutricional.molibdenio_100g %}</td>
+				<td>{% truncar tabelaNutricional.molibdenio_Porcao %}</td>
+				<td>{{ tabelaNutricional.molibdenio_Arred }}</td>
+				<td >{{ tabelaNutricional.molibdenio_VD }}</td>
+			</tr>
+			<tr>
+				<td>Selenio ({{ tabelaNutricional.selenio_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.selenio %}</td>
+				<td>{% truncar tabelaNutricional.selenio_100g %}</td>
+				<td>{% truncar tabelaNutricional.selenio_Porcao %}</td>
+				<td>{{ tabelaNutricional.selenio_Arred }}</td>
+				<td >{{ tabelaNutricional.selenio_VD }}</td>
+			</tr>
+			<tr>
+				<td>Colina ({{ tabelaNutricional.colina_unidadeMd }})</td>
+				<td>{% truncar tabelaNutricional.colina %}</td>
+				<td>{% truncar tabelaNutricional.colina_100g %}</td>
+				<td>{% truncar tabelaNutricional.colina_Porcao %}</td>
+				<td>{{ tabelaNutricional.colina_Arred }}</td>
+				<td >{{ tabelaNutricional.colina_VD }}</td>
+			</tr>
+			{% for nutriente in nutrientesExtras %}
+			<tr>
+				<td><b>[Manual] </b>{{ nutriente.nomeNutri }} ({{ nutriente.medida }})</td>
+				<td>{{ nutriente.qtde }}</td>
+				<td>-</td>
+				<td>-</td>
+				<td>{{ nutriente.qtde_Arred }}</td>
+				<td>{{ nutriente.qtde_VD }}</td>
+			</tr>
+			{% endfor %}
+
+		</tbody>
+	</table>
+
+	<div class="col align-items-center d-flex justify-content-center">
+		<button class="btn btn-outline-secondary btn-lg"type="button" style=" margin-right: 1%; margin-left: 20%;"onclick="location.href = '{% url 'editarFicha1' pk=fichaAtual.pk %}'" style="margin:20px 5px">Voltar</button>
+		<button class="btn btn-outline-secondary btn-lg" style=" margin-left: 1%; margin-right: 20%;" onclick="location.href = '{% url 'editarFicha3' pk=fichaAtual.pk %}'" style="margin:20px 5px">Salvar e continuar</button>
+	</div>
+</div>
+
+{% endblock %}

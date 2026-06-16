@@ -1,0 +1,142 @@
+/* Reseta pro padrão CSS */
+
+
+table {
+  display: table;
+  border-collapse: separate;
+  border-spacing: 2px;
+  border-color: gray;
+  color: #000;
+}
+thead	{
+  display: table-header-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+tfoot	{
+  display: table-footer-group;
+  vertical-align: middle;
+  border-color: inherit;	
+}
+.vertical tr	{
+  display: table-row;
+}
+.linear tr	{
+  vertical-align: inherit;
+  border-color: inherit;
+}
+th	{
+  display: table-cell;
+  vertical-align: inherit;
+  font-weight: bold;
+  text-align: center;
+}
+td {
+  display: table-cell;
+  vertical-align: inherit;
+}
+
+
+
+/* Meu CSS */
+#table-fichaX {
+  width: 350px;
+  border: 2px solid black;
+  border-collapse: collapse;
+  background-color: rgb(255, 255, 255);
+}
+
+td, th {
+  border: 1px solid black;
+  float: initial !important;
+  text-align: center;
+  padding: 5px;
+  margin-bottom: 0 !important;
+  font-size: 10.5px;
+  width: 23%;
+  /* Defina a largura da nova coluna */
+}
+.primeira-coluna {
+  text-align: left;
+  width: fit-content;
+}
+tr:after {
+    content: none;
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+.container-botao{
+  width: 80%;
+  margin: 0 auto;
+}
+.container-botao a, button {
+  font-size: 1.2em !important;
+  margin: 0 2%
+}
+.cabecalho h3, .cabecalho b {
+  font-size: 16px;
+}
+.linha-cabeca1 {
+  height: 1px;
+  background-color: #000;
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+.linha-cabeca2 {
+  height: 1.5px;
+  background-color: #000;
+  margin-bottom: 3px;
+  margin-top: 3px;
+}
+#esquerda {
+  text-align: left;
+  font-size: 10.5px;
+}
+
+h4 b {
+  font-size: 16px;
+  font-weight: 800;
+}
+.alergicos {
+  font-size: 14px;
+  font-weight: 800;
+}
+.botao {
+  background-color: #A1CC3F; /* Verde */
+  border: none;
+  color: white;
+  padding: 7px 15px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  width: 200px;
+  text-align: center;
+  font-size: 14.4px;
+}
+
+.botao:hover {
+  color: white;
+  text-decoration: none;
+  background-color: #7DAA2E; /* Verde mais escuro ao passar o mouse */
+  transition: background-color 0.3s;
+}
+.botao svg {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  fill: white;
+}
+
+.botao-copiar {
+  font-weight: bold;
+}

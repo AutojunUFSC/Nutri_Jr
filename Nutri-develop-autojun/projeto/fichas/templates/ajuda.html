@@ -1,0 +1,82 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block principal %}
+<title> Ajuda</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/ajuda.css' %}">
+
+<div class="container">
+    <div class="row titulo">
+        <div class="col-md-4"><h1>Dúvidas frequentes</h1></div>
+	</div>
+    <br><br> 
+    
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como cadastrar um novo usuário no sistema?</h3>
+    <p class="justify"> Primeiro, você deve sair do usuário com o qual está logado. Para isso, clique em "Sair" no menu de navegação do sistema, no canto superior direito da tela.
+    <p class="justify"> Então, você será direcionado para a página inicial do sistema. 
+    Clique em "Cadastre-se", abaixo dos campos para fazer o login. Você será direcionado à página de cadastro. 
+    Basta inserir os dados necessários e pedir a chave de cadastro ao administrador. 
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como acessar o sistema?</h3>
+    <p class="justify"> Na página inicial do sistema, insira seu nome, como no exemplo, e sua senha. Então, é só clicar no botão de "Login".
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como criar uma nova ficha?</h3>
+    <p class="justify"> Na página das fichas registradas, clique no botão "Registrar Ficha", localizado logo abaixo da tabela.
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como adicionar novos ingredientes?</h3>
+    <p class="justify"> Você pode criar um novo ingrediente acessando a página dos ingredientes registrados, 
+    clicando em "Ingredientes" no menu de navegação do sistema, e então clicando no botão "Registrar Ingrediente", 
+    localizado logo abaixo da tabela.
+    <p class="justify"> Outra maneira de acessar a página de registro de um novo ingrediente é clicando no botão 
+    "Cadastrar novo ingrediente" na página de criação da receita (etapa 2/3 do registro da ficha).
+    <p class="justify"> Então, preencha os campos com os dados do ingrediente que você está cadastrando.
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como editar um ingrediente?</h3>
+    <p class="justify"> Na página dos ingredientes registrados, você pode editar um ingrediente clicando no botão 
+    com o ícone de um lápis (<i class="fa fa-pencil" aria-hidden="true"></i>).
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como visualizar uma ficha já pronta?</h3>
+    <p class="justify"> Na página das fichas registradas, você pode visualizar uma ficha pronta clicando no botão 
+    com o ícone de um olho (<i class="fa fa-eye" aria-hidden="true"></i>).
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Posso editar uma ficha finalizada?</h3>
+    <p class="justify"> Você consegue editar as fichas em criação e as já finalizadas clicando para editar qualquer 
+    parte da ficha como indicado na tabela da página das fichas registradas.
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como eu marco uma ficha como finalizada?</h3>
+    <p class="justify"> Ao finalizar uma ficha, na página de visualização, você deve clicar no quadrado ao 
+    lado de "Ficha finalizada", para marcá-lo com um check. Ao fazer isso, a ficha será sinalizada como finalizada 
+    na página das fichas registradas.
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Esqueci minha senha. O que eu faço?</h3>
+    <p class="justify"> Se você não consegue lembrar de sua senha, entre em contato com o admin. Ele consegue fazer 
+    a alteração das senhas de todos os usuários.
+    <br><br>
+
+    <h3><i class="fa fa-angle-double-right" style="color:#A1CC3F" aria-hidden="true"></i> 
+    Como alterar a chave para o cadastro de novos usuários?</h3>
+    <p class="justify"> Apenas o administrador consegue alterar a chave de cadastro. Para isso, ele deve ir até a
+    página com os usuários registrados e cadastrar uma nova chave no campo abaixo da tabela.
+    <br><br>
+    
+
+</div>
+
+{% endblock %}

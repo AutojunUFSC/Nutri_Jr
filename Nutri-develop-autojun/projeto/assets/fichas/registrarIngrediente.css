@@ -1,0 +1,71 @@
+td p {
+    text-align: left;
+    position: relative;
+    top: 14px;
+    font-size: 14px;
+}
+
+tr th{
+    font-size: 15px;
+}
+
+.form-group {
+    height: 40px;
+    margin-bottom: 0.5rem;
+    position: relative;
+    top: -10px;
+}
+
+.table{
+    width: 70%; 
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.row {
+    flex-wrap: unset;
+    padding-left: 0.5%;
+    width: 55%;
+    margin-left: 17.5%;
+    margin-right: 15%;
+}
+
+.form-control {
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem 1rem;
+   /*  border: 1px solid #515a518f; */
+   font-size: 15px;
+}
+
+
+@media(max-width:1000px){
+    .table{
+        width: 95%; 
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+    } 
+    .row{
+        width: 75%;
+        margin-left: 6.5%;
+        margin-right: 7%;
+    }
+    .btn{
+        width: 50%;
+        height: 48%;
+       
+    } 
+    .col-5{
+        padding-left: 0%;
+    }
+
+}
+
+
+@media (max-width: 400px){
+    th{
+        font-size: 8px;
+        text-align: left;
+    }
+    
+}
+

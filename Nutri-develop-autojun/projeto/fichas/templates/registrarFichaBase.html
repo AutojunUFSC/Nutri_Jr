@@ -1,0 +1,73 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block principal %}
+<title>Registra Ficha</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/registrarFichaBase.css' %}">
+
+		
+
+
+<div class="col-md-3"></div>
+<div class="col-md-6">
+	<div class="progress">
+		<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
+	</div>
+</div><br>
+
+
+
+<div class="row tituloo mb-0">
+	<div class="col-md-0"></div>
+	<div class="col-md-2"><h1>Nova Ficha</h1></div>
+</div><br>
+
+<form class="align-self-center" method="post" novalidate>
+	{% csrf_token %}
+	<div class="row ">
+		<div class="col-6">
+
+			{{ form.autor|bootstrap }}Logado agora: {{ request.user.username }}
+		</div>
+		<div class="col-6">
+			
+			{{ form.cliente|bootstrap }}
+		</div>
+	</div>
+	<div class="row ">	
+		<div class="col-6">
+			
+			{{ form.nomeFicha|bootstrap }}
+		</div>
+		<div class="col-6">	
+			
+			{{ form.pesoTotal|bootstrap }} *Em gramas
+		</div>
+	</div>
+	<div class="row ">	
+		<div class="col-6">	
+
+			{{ form.pesoPorcao|bootstrap }} *Em gramas
+		</div>
+		<div class="col-6">
+			{{ form.pesoAnvisa|bootstrap }} 
+		</div>
+	</div>
+	<div class="row ">
+		<div class="col-6">
+			{{ form.medCaseiraPorcao|bootstrap }} 
+		</div>
+		<div class="col-6">
+			{{ form.dataCriacao|bootstrap }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col align-items-center d-flex justify-content-left">
+			<button class="btn btn-outline-secondary btn-lg"type="button" onclick="location.href = '{% url 'listaFichas' %}'" style="margin-bottom:20px">Cancelar</button>
+			<button class="btn btn-outline-secondary btn-lg" type="submit" style="margin:0px 0px 20px 10px">Salvar e continuar</button>
+		</div>
+	</div> 
+</form>
+
+{% endblock %}

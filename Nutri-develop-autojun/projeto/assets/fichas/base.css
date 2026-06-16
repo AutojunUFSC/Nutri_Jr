@@ -1,0 +1,165 @@
+/* TAGS */
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    font-size: 12px;
+}
+body{
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 0%;
+    padding-bottom: 0%;
+}
+img{
+    position: relative;
+    margin-top: 20%;
+
+}  
+
+p, li{
+    text-align: center
+}
+
+/* CLASS */
+.container-fluid {
+    padding-right: 0; 
+    padding-left: 0; 
+}
+
+
+
+.glyphicon{
+    font-size: 45px;
+}
+ .dropdown{
+    float: right;
+    margin-left: 93%;
+} 
+.titulo h1{
+    border-bottom: 1px solid #A1CC3F;
+    width: fit-content;
+}
+
+#logo{
+    width: 140px;
+    margin-left: 10%;
+}
+#autojun{
+    width: 80px;
+}
+
+.navbar {
+    padding: 0%;
+} 
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(255, 255, 255);
+    font-size: medium;
+}
+
+.nav-item {
+    margin-right: 1%;
+}
+
+.navbar-nav{
+    margin-left: 50%;
+}
+ 
+@media (max-width: 800px) {
+    .navbar-nav{
+        margin-left: 65%;
+    }
+}
+
+.navbar-light .navbar-nav .nav-link:focus, .navbar-light .navbar-nav .nav-link:hover {
+    color: #A1CC3F; 
+}
+
+@media (min-width: 992px) {
+/*     .navbar-expand-lg .navbar-nav .nav-link {
+        padding-right: .5rem;
+        padding-left: .5rem;
+    } */
+}
+/* 
+@media (min-width: 1500px) {
+    .navbar-expand-lg .navbar-nav .nav-link {
+        font-size: 400px;
+    }
+} */
+
+footer {
+    background:#ffffff;
+    margin-top:6%;
+    margin-bottom: 0%;
+    padding: 1%;
+    color: #fff;
+    text-align: right;
+    font-size: small;
+    color: rgb(0, 0, 0);
+  }
+
+
+
+
+
+/* tabelas */
+table {
+    width: 100%;
+    border: 1px solid rgb(199, 190, 190);
+}
+
+thead, tbody, tr, td, th { 
+    display: block;
+}
+
+tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+thead th {
+    height: 40px;
+
+    /*text-align: left;*/
+}
+
+tbody {
+    overflow-y: auto;
+}
+
+tbody td, thead th {
+    width: 16.65%; /*muda o tamanho dos valores na tabela parça */
+    float: left;
+}
+
+nav a img {
+    width: 50px;
+    padding: 0%;
+    margin: 0%;
+  }
+
+@media(max-width:1000px){
+    nav a img {
+      position: relative;
+      float: left;
+      }
+    .navbar-toggler {
+        position: absolute;
+        right: 4px;
+    }
+}
+
+@media (min-width: 768px){
+    .navbar-collapse.collapse {
+        display: none; 
+    }
+} 
+
+#titulo-cabecalho {
+  color: #F2F2F2;
+  font-weight: 900;
+  margin-left: 2%;
+}

@@ -1,0 +1,86 @@
+/* TAGS */
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    font-size: 12px;
+}
+h3{
+    font-size: 14px;
+}
+body{
+    background-color: lightgrey;
+}
+img{
+    margin-top: -7%;
+}
+header{
+    width: 100%;
+    min-height: 100px;
+    margin: 0;
+    background-color: rgb(167, 167, 167);
+}
+p, li{
+    text-align: center
+}
+th, td, tr{
+    text-align: center;
+    border: 1px solid black;
+    padding: 0px, 0;
+}
+tr:first-child{background: #A1CC3F !important}
+tr:nth-child(even){background: lightgrey}
+tr:nth-child(odd){background: white}
+td:first-child{
+    width: 80%;
+}
+
+/* CLASS */
+.container{
+    padding: 0;
+    width: 80%;
+}
+.fundo{
+    background-color: white;
+    height: 100%;
+    padding-bottom: 50px;
+}
+.glyphicon{
+    font-size: 45px
+}
+.dropdown{
+    float: right;
+    margin: 2%;
+}
+.titulo h1{
+    border-bottom: 1px solid #A1CC3F;
+    width: fit-content;
+}
+.row .conteudo{
+    margin-top: 3%;
+}
+
+/* ID */
+#tabela{
+    overflow-y:auto;
+    height: 30vh;
+    border: 2px solid lightgreen;
+}
+#salvar{
+    padding: 2%;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+#cancelar{
+    padding: 1%;
+    border: 1px solid darkgrey;
+    border-radius: 2px;
+}
+#botoes{
+    width: 100%;
+    text-align: center;
+}
+#logo{
+	width: 200px;
+}

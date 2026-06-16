@@ -1,0 +1,669 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% load trunca_numeros %}
+{% block principal %}
+<title>Tabela Nutricional</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/tabelaNutricional.css' %}">
+
+<br>
+<div class="progress progresso">
+    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
+</div>
+<br>
+
+<div class="tituloo">
+  <h1>Tabela Nutricional</h1>
+  <h4>Receita de: <b>{{ fichaAtual.nomeFicha }}</b></h4><br>
+</div>
+
+
+<div>		
+	<table class="table table-striped" style="text-align:center">
+		<thead>
+			<tr style=" background-color: rgba(103, 172, 107, 0.342);">
+        <th style="width: 14%;">Mostrar</th>
+        <th style="width: 14%;">Item</th>
+        <th style="width: 14%;">Qtde Real</th>
+        <th style="width: 14%;">Qtde p/ 100g</th>
+        <th style="width: 14%;">Qtde p/ Porcao</th>
+        <th style="width: 16%;">Qtde Arredondada</th>
+        <th style="width: 14%;">Valor Diário (%)</th>
+			</tr>
+		</thead>
+		<tbody>
+        <tr style="{% if tabelaNutricional.proteinas_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='proteinas' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.proteinas_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Proteinas</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.proteinas %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.proteinas_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.proteinas_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.proteinas_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.proteinas_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.gordTotais_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='gordTotais' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.gordTotais_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Gorduras Totais</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordTotais %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordTotais_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordTotais_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.gordTotais_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.gordTotais_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.carboidratos_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='carboidratos' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.carboidratos_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Carboidratos</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.carboidratos %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.carboidratos_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.carboidratos_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.carboidratos_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.carboidratos_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.fibras_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='fibras' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.fibras_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Fibras</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fibras %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fibras_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fibras_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.fibras_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.fibras_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.energiakcal_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='energiakcal' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.energiakcal_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Energia (kcal)</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.energiakcal %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.energiakcal_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.energiakcal_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.energiakcal_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.energiakcal_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.energiaKJ_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='energiaKJ' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.energiaKJ_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Energia (kJ)</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.energiaKJ %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.energiaKJ_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.energiaKJ_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.energiaKJ_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.energiaKJ_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.calcio_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='calcio' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.calcio_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Cálcio</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.calcio %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.calcio_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.calcio_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.calcio_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.calcio_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.ferro_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='ferro' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.ferro_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Ferro</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.ferro %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.ferro_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.ferro_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.ferro_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.ferro_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.magnesio_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='magnesio' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.magnesio_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Magnésio</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.magnesio %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.magnesio_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.magnesio_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.magnesio_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.magnesio_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.fosforo_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='fosforo' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.fosforo_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Fósforo</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fosforo %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fosforo_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fosforo_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.fosforo_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.fosforo_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.potassio_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='potassio' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.potassio_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Potássio</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.potassio %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.potassio_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.potassio_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.potassio_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.potassio_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.sodio_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='sodio' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.sodio_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Sódio</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.sodio %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.sodio_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.sodio_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.sodio_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.sodio_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.zinco_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='zinco' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.zinco_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Zinco</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.zinco %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.zinco_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.zinco_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.zinco_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.zinco_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.cobre_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='cobre' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.cobre_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Cobre</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cobre %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cobre_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cobre_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.cobre_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.cobre_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.manganes_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='manganes' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.manganes_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Manganês</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.manganes %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.manganes_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.manganes_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.manganes_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.manganes_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.retinol_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='retinol' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.retinol_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Retinol</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.retinol %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.retinol_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.retinol_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.retinol_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.retinol_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.RE_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='RE' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.RE_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">RE</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.RE %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.RE_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.RE_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.RE_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.RE_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.vitaminaARAE_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='vitaminaARAE' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.vitaminaARAE_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">RAE</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaARAE %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaARAE_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaARAE_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.vitaminaARAE_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.vitaminaARAE_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.vitaminaC_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='vitaminaC' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.vitaminaC_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Vitamina C</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaC %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaC_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaC_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.vitaminaC_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.vitaminaC_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.tiamina_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='tiamina' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.tiamina_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Tiamina</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.tiamina %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.tiamina_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.tiamina_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.tiamina_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.tiamina_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.riboflavina_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='riboflavina' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.riboflavina_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Riboflavina</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.riboflavina %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.riboflavina_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.riboflavina_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.riboflavina_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.riboflavina_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.niancina_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='niancina' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.niancina_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Niacina</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.niancina %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.niancina_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.niancina_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.niancina_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.niancina_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.piridoxina_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='piridoxina' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.piridoxina_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Vitamina Piridoxina (B6)</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.piridoxina %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.piridoxina_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.piridoxina_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.piridoxina_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.piridoxina_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.gordSat_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='gordSat' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.gordSat_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Gorduras saturadas</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordSat %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordSat_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordSat_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.gordSat_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.gordSat_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.gordTrans_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='gordTrans' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.gordTrans_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Gorduras trans</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordTrans %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordTrans_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordTrans_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.gordTrans_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.gordTrans_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.gordPoli_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='gordPoli' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.gordPoli_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Gorduras polinsaturadas</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordPoli %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordPoli_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordPoli_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.gordPoli_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.gordPoli_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.gordMono_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='gordMono' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.gordMono_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Gorduras monoinsaturadas</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordMono %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordMono_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.gordMono_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.gordMono_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.gordMono_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.colesterol_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='colesterol' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.colesterol_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Colesterol</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.colesterol %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.colesterol_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.colesterol_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.colesterol_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.colesterol_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.acucaresadd_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='acucaresadd' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.acucaresadd_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Açucares adicionais</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acucaresadd %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acucaresadd_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acucaresadd_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.acucaresadd_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.acucaresadd_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.omega6_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='omega6' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.omega6_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Omega 6</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.omega6 %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.omega6_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.omega6_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.omega6_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.omega6_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.omega3_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='omega3' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.omega3_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Omega 3</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.omega3 %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.omega3_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.omega3_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.omega3_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.omega3_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.vitaminaD_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='vitaminaD' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.vitaminaD_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Vitamina D</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaD %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaD_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaD_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.vitaminaD_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.vitaminaD_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.vitaminaE_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='vitaminaE' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.vitaminaE_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Vitamina E</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaE %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaE_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaE_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.vitaminaE_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.vitaminaE_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.vitaminaK_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='vitaminaK' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.vitaminaK_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Vitamina K</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaK %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaK_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaK_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.vitaminaK_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.vitaminaK_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.acidoFolico_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='acidoFolico' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.acidoFolico_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Acido folico</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acidoFolico %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acidoFolico_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acidoFolico_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.acidoFolico_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.acidoFolico_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.acidoPantotenico_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='acidoPantotenico' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.acidoPantotenico_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Acido pantotenico</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acidoPantotenico %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acidoPantotenico_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acidoPantotenico_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.acidoPantotenico_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.acidoPantotenico_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.vitaminaB12_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='vitaminaB12' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.vitaminaB12_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Vitamina B12</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaB12 %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaB12_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.vitaminaB12_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.vitaminaB12_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.vitaminaB12_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.cloreto_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='cloreto' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.cloreto_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Cloreto</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cloreto %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cloreto_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cloreto_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.cloreto_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.cloreto_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.cromo_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='cromo' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.cromo_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Cromo</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cromo %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cromo_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.cromo_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.cromo_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.cromo_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.fluor_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='fluor' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.fluor_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Fluor</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fluor %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fluor_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.fluor_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.fluor_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.fluor_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.iodo_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='iodo' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.iodo_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Iodo</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.iodo %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.iodo_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.iodo_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.iodo_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.iodo_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.molibdenio_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='molibdenio' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.molibdenio_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Molibdenio</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.molibdenio %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.molibdenio_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.molibdenio_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.molibdenio_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.molibdenio_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.selenio_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='selenio' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.selenio_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Selenio</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.selenio %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.selenio_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.selenio_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.selenio_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.selenio_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.colina_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='colina' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.colina_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Colina</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.colina %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.colina_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.colina_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.colina_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.colina_VD}}</td>
+        </tr>
+        <tr style="{% if tabelaNutricional.acucaresTotais_VD >= 5 %} font-weight: bold; {% endif %}">
+          <td style="width: 14%;">
+            <a href="{% url 'atualizarMostrar' item='acucaresTotais' pk=tabelaNutricional.pk %}">
+            {% if tabelaNutricional.acucaresTotais_Mostrar == 1 %} <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> {% else %} <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> {% endif %}
+            </a>
+          </td>
+          <td style="width: 14%;">Açucares Totais</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acucaresTotais %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acucaresTotais_100g %}</td>
+          <td style="width: 14%;">{% truncar tabelaNutricional.acucaresTotais_Porcao %}</td>
+          <td style="width: 16%;">{{ tabelaNutricional.acucaresTotais_Arred }}</td>
+          <td style="width: 14%;">{{ tabelaNutricional.acucaesTotais_VD}}</td>
+        </tr>
+        {% for nutriente in nutrientesExtras %}
+        <tr>
+          <td style="width: 14%;"><a href="{% url 'deletarNutrienteExtra' nutriente.pk %}">Excluir item</a></td>
+          <td style="width: 14%;"><b>[Manual] </b>{{ nutriente.nomeNutri }}</td>
+          <td style="width: 14%;">{{ nutriente.qtde }}</td> 
+          <td style="width: 14%;">-</td>
+          <td style="width: 14%;">-</td>
+          <td style="width: 16%;">{{ nutriente.qtde_Arred }}</td>
+          <td style="width: 14%;">{{ nutriente.qtde_VD }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+<br><br>
+<form class="align-self-center" method="post" novalidate>
+	{% csrf_token %}
+	<div class="row ">
+		<div class="col-10">
+      <h4>Adicionar item manualmente na tabela:</h4>
+      {{ formNutriente.nomeNutri|bootstrap }}
+			{{ formNutriente.qtde|bootstrap }}
+			{{ formNutriente.qtde_Arred|bootstrap }}
+			{{ formNutriente.medida|bootstrap }}
+			{{ formNutriente.qtde_VD|bootstrap }}
+			<button class="btn btn-outline-secondary btn-lg" type="submit">Adicionar</button><br><br>
+		</div>
+	</div>
+</form>
+
+<br>
+<form method="POST">
+  <div class="row">
+    <div class="col-md-10">
+      {% csrf_token %}
+      {{ formInfComplementares.as_p}}
+      Ex: "CONTÉM GLÚTEN. CONTÉM LACTOSE. ALÉRGICOS: CONTÉM DERIVADOS DE
+      LEITE E SOJA. PODE CONTER TRAÇOS DE SOJA."
+    </div>
+  </div>
+
+  <div class="col align-items-center d-flex justify-content-center">
+    <button class="btn btn-outline-secondary btn-lg"type="button" style=" margin-right: 1%; margin-left: 20%;" onclick="location.href = '{% url 'editarFicha2' pk=fichaAtual.pk %}'" style="margin:20px 5px">Voltar</button>
+    <button class="btn btn-outline-secondary btn-lg" style=" margin-left: 1%; margin-right: 20%;" onclick="location.href = '{% url 'fichaX' pk=fichaAtual.pk %}'" style="margin:20px 5px">Salvar e continuar</button>
+  </div>
+</form>
+
+
+{% endblock %}

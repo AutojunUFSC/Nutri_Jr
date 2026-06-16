@@ -1,0 +1,150 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block principal %}
+<title>Usuários Registrados</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/usuarios_registrados.css' %}"> 
+ 	<div class="row titulo">
+		<h1>Usuários Registrados</h1>
+	</div>
+
+  <div id="erros" class="row">
+  </div>
+  <div id="mensagens" class="row">
+	</div>
+<br>
+
+	<table class="table table-striped">
+		<thead>
+			<tr style=" background-color: rgba(103, 172, 107, 0.342);">
+				<th style="width:25%;">Usuário</th>
+				<th style="width:25%;">Semestre</th>
+				<th style="width:50%;">E-mail</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for membro in membros %}
+			<tr>
+				<td class="filterable-cell" style="width:25%;">{{ membro.nome }}</td>
+				<td class="filterable-cell" style="width:25%;">{{ membro.semestre }}</td>
+				<td class="filterable-cell" style="width:50%;">{{ membro.email }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+  {% if eh_admin %}
+  <div class="row">
+    <div class="col-sm">
+      <h2>Definir nova chave</h2>
+      <form method="post" id="nova_chave_form">
+			  {% csrf_token %}
+        {{ form.key|bootstrap }}
+        <button type="submit" class="btn btn-secondary ">Confirmar</button>
+        <br><hr>
+        <hr>
+        <strong>Chave atual:</strong>  <span id="chave_atual">{{ chave }}</span>
+      </form>
+    </div>
+    <br>
+    <div class="col-sm">
+      <h2>Alterar senhas</h2>
+      <form method="post" id="troca_senha_form">
+        {% csrf_token %}
+        {{ form_troca_senha.usuario|bootstrap }}
+        {{ form_troca_senha.nova_senha|bootstrap }}
+        <button type="submit" class="btn btn-secondary ">Alterar senha deste usuário</button>
+      </form>
+    </div>
+    <br>
+    <div class="col-sm">
+      <h2>Excluir Membro</h2>
+      <form method="post" id="apaga_membro_form">
+        {% csrf_token %}
+        {{ form_apaga_membro.membroExcluido|bootstrap }}
+        {{ form_apaga_membro.membroDestino|bootstrap }}
+        <button type="submit" class="btn btn-secondary" onclick="return confirm('Tem certeza que quer excluir este membro?');">Excluir membro</button>
+      </form>
+    </div>
+  </div> 
+  {% else %}
+    <br>
+    <div class="row">
+    {% csrf_token %}
+      <div class="col-11 pl-8 ml-10">
+        Para visualizar ou alterar a chave de novos cadastros ou alterar a senha de algum usuário acesse essa mesma página logado com o usuário admin
+      </div>
+    </div> 
+  </div> 
+  {% endif %}
+{% endblock %}
+
+{% block script %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      var $nova_chave_form = $('#nova_chave_form');
+      $nova_chave_form.submit(function(event){
+        event.preventDefault();
+        var $formData = $nova_chave_form.serialize();
+        $.ajax({
+          method: 'POST',
+          url: '{% url "mudaChave" %}',
+          data: $formData,
+          success: handleSuccess,
+          error: handleError,
+        });
+        function handleSuccess(data){
+          document.getElementById("chave_atual").innerHTML = data.nova_chave
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-success">'+data.ajax_message+'</div>'
+          $nova_chave_form[0].reset();
+        }
+        function handleError(data){
+          console.log(data)
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+data.responseJSON.ajax_message+'</div>'
+        }
+      });
+
+      var $troca_senha_form = $('#troca_senha_form');
+      $troca_senha_form.submit(function(event){
+        event.preventDefault();
+        var $formData = $troca_senha_form.serialize();
+        $.ajax({
+          method: 'POST',
+          url: '{% url "trocaSenha" %}',
+          data: $formData,
+          success: handleSuccess,
+          error: handleError,
+        });
+        function handleSuccess(data){
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-success">'+data.ajax_message+'</div>';
+          $troca_senha_form[0].reset();
+        }
+        function handleError(data){
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+data.responseJSON.ajax_message+'</div>';
+        }
+      });
+      
+      var $apaga_membro_form = $('#apaga_membro_form');
+      $apaga_membro_form.submit(function(event){
+        event.preventDefault();
+        var $formData = $apaga_membro_form.serialize();
+        $.ajax({
+          method: 'POST',
+          url: '{% url "deletaMembro" %}',
+          data: $formData,
+          success: handleSuccess,
+          error: handleError,
+        });
+        function handleSuccess(data){
+          alert(data.ajax_message);
+          location.reload();
+        }
+        function handleError(data){
+          console.log(data);
+          console.log(data.responseJSON.form_errors);
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+data.responseJSON.form_errors+'</div>';
+        }
+      });
+    });
+
+  </script>
+{% endblock %}

@@ -1,0 +1,291 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% block principal %}
+<title>Ficha</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/fichax.css' %}">
+<div class="container fundo">
+​
+<div class="row titulo">
+  <div class="col-md-2"></div>
+	<h1>{{ fichaAtual.nomeFicha }}</h1>
+</div>
+​
+<div class="row cabecalho">
+  <div class="col-md-2"></div>
+	<div class="col-md-4">
+		<h3><b>Nome da receita: </b>{{ fichaAtual.nomeFicha }}</h3><br>
+		<h3>Criada por <b>{{ fichaAtual.autor }}</b> em <b>
+      {% if fichaAtual.dataCriacao.day < 10 %}0{% endif %}{{ fichaAtual.dataCriacao.day }}/{% if fichaAtual.dataCriacao.month < 10 %}0{% endif %}{{ fichaAtual.dataCriacao.month }}/{{ fichaAtual.dataCriacao.year }}</b></h3><br>
+		<h3><b>Cliente:</b> {{ fichaAtual.cliente }}</h3><br>
+	</div>
+	<div class="col-md-4">
+		<h3><b>Peso de preparação:</b> {{ fichaAtual.pesoLiquidoPreparacao }}</h3><br>
+		<h3><b>Peso total:</b> {{ fichaAtual.pesoTotal }}</h3><br>
+		<h3><b>Peso por porção (Cliente): </b>{{ fichaAtual.pesoPorcao }}</h3><br>
+		<h3><b>Peso por porção (Anvisa): </b>{{ fichaAtual.pesoAnvisa }}</h3><br>
+		<h3><b>Número de porções:</b> {{ fichaAtual.numPorcoes }}</h3><br>
+	</div>
+</div>
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-4">
+        <form method="POST" action="{% url 'atualizarFinalizada' pk=fichaAtual.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="botao">
+                {% if fichaAtual.finalizada == 1 %} 
+                    <i class="fa fa-check-square-o fa-lg" aria-hidden="true"></i> 
+                {% else %} 
+                    <i class="fa fa-square-o fa-lg" aria-hidden="true"></i> 
+                {% endif %}
+                &nbsp;Ficha finalizada
+            </button>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <button type="button" id="botaoCopiarTudo" class="botao botao-copiar">
+            <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#FFFFFF" style="width: 20px; height: 20px; vertical-align: middle;"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#FFFFFF" fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v9a2 2 0 002 2h2v2a2 2 0 002 2h9a2 2 0 002-2V8a2 2 0 00-2-2h-2V4a2 2 0 00-2-2H4zm9 4V4H4v9h2V8a2 2 0 012-2h5zM8 8h9v9H8V8z"></path> </g></svg>
+            Copiar Conteúdo
+        </button>
+    </div>
+</div>
+<br>
+<div id="conteudo-para-copiar" class="row">
+  <div class="col-md-2"></div>
+  <div class="col-md-8" >
+		<h4 style="margin-left: 50px;"><b>Modelo de tabela vertical</h4></b><br>
+    <table class="vertical" id="table-fichaX">
+      <tr>
+        <td colspan="4" style="font-size: 20px;">
+          <b><strong>INFORMAÇÃO NUTRICIONAL</strong></b><br>
+          <hr class="linha-cabeca1">
+          <div id="esquerda">
+            Porções por embalagem: {{ fichaAtual.numPorcoes }} {% if fichaAtual.numPorcoes == 1 %}porção{% else %}porções{% endif %} <br>
+            Porção: {{ pesoPorcaoSemZero }}g ({{unidadesAnvisa}} {{ fichaAtual.medCaseiraPorcao }})
+          </div>
+          <hr class="linha-cabeca2">
+        </td>
+      </tr>
+      <tr>
+        <td class="primeira-coluna">ㅤ</td> <!-- Espaço em branco para poder selecionar certinho --> 
+        <td><b style="font-size: 10.5px;">100g</b></td>
+        <td><b style="font-size: 10.5px;">{{ pesoPorcaoSemZero }}g</b></td>
+        <td><b style="font-size: 10.5px;">%VD*</b></td>
+      </tr>
+
+      {% for nutrienteFinal in nutrientesFinais %}
+      <tr>
+        <td class="primeira-coluna"
+            {% if nutrienteFinal.0 == "Açúcares adicionados" %}
+                style="padding-left: 14px;"
+            {% elif nutrienteFinal.0 in identados %}
+                style="padding-left: 10px;"
+            {% endif %}>
+            {{ nutrienteFinal.0 }} ({{ nutrienteFinal.3 }})
+        </td>
+        <td>{{ nutrienteFinal.4 }}</td>
+        <td>{{ nutrienteFinal.1 }}</td>
+        <td>{{ nutrienteFinal.2 }}</td>
+      </tr>
+      {% endfor %}
+
+      <tr>
+        <td colspan="4" style="text-align: left; font-size: 8px;">
+          *Percentual de valores diários fornecidos pela porção. <br>
+          ** Valor diário não estabelecido.
+        </td>
+      </tr>
+    </table>
+		<br>
+      <p style="text-align: justify; font-size: 10.5px">Ingredientes:
+			{{ ordemIngredientesFront }}
+      <br><br>
+      <b class="alergicos">ALÉRGICOS: {{ tabelaAtual.informacoesComplementares }} </b>
+
+      {% if lupa_img %}
+        <div class="text-start">
+          <img class="imagem-lupa-copia" 
+              style="margin-top: 15px; width:140px;" 
+              src="data:image/png;base64,{{ lupa_img }}" 
+              alt="Alto em">
+        </div>
+      {% endif %}
+    
+    <br><br>	
+	  <div>
+		<h4 style="margin-left: 10px;"><b>Modelo de tabela linear</h4></b><br>
+    <table class="linear" id="table-fichaX-linear" style="border-collapse:collapse; font-family:Arial, sans-serif; width:100%; max-width: 600px;">
+    <tr>
+      <td colspan="4" style="font-size:20px;">
+        <div id="esquerda">
+          <b><strong style="font-size: 13px;">INFORMAÇÃO NUTRICIONAL</strong></b><br>
+          <hr class="linha-cabeca1">
+          Porções por embalagem: {{ fichaAtual.numPorcoes }} porção <b>•</b> 
+          Porção: {{ pesoPorcaoSemZero }}g ({{ fichaAtual.medCaseiraPorcao }})
+          <hr class="linha-cabeca2">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        <p style="text-align: justify; font-size:10.5px;">
+          Por 100g (<b style="font-size:10.5px;">{{ fichaAtual.pesoPorcao }}g</b>, %VD*):
+          {% for nutrienteFinal in nutrientesFinais %}
+            {% if nutrienteFinal.0 not in identados %}
+              {% if nutrienteFinal.0 == "Fibra alimentar" or nutrienteFinal.0 == "Proteínas" %} <b>•</b> {% endif %}
+              {{ nutrienteFinal.0 }} 
+              {{ nutrienteFinal.4 }}{% if nutrienteFinal == nutrientesFinais.0 %} {% endif %}{{ nutrienteFinal.3 }}</span> 
+              (<b style="font-size:10.5px;">{{ nutrienteFinal.1 }}{% if nutrienteFinal == nutrientesFinais.0 %} {% endif %}{{ nutrienteFinal.3 }}</b>, {{ nutrienteFinal.2 }}%)
+              {% if nutrienteFinal.0 == "Carboidratos totais" %}, dos quais 
+              {% elif nutrienteFinal.0 == "Gorduras Totais" %}, das quais 
+              {% elif not forloop.last %}, <b style="font-size:10.5px;">•</b>{% else %}.{% endif %}
+            {% else %}
+              {{ nutrienteFinal.0 }} 
+              <span style="white-space:nowrap; font-size: 10.5px;">{{ nutrienteFinal.4 }}{{ nutrienteFinal.3 }}</span> 
+              (<b style="font-size:10.5px;">{{ nutrienteFinal.1 }}{{ nutrienteFinal.3 }}</b>, {{ nutrienteFinal.2 }}%)
+            {% endif %}
+          {% endfor %}
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4" style="text-align:left; font-size:10.5px;">
+        *Percentual de valores diários fornecidos pela porção.<br>
+        ** Valor diário não estabelecido.
+      </td>
+    </tr>
+  </table>
+		<br><br>
+      <p style="text-align: justify; font-size: 10.5px">Ingredientes:
+			{{ ordemIngredientesFront }}
+      <br><br>
+      <b class="alergicos">ALÉRGICOS: {{ tabelaAtual.informacoesComplementares }} </b>
+
+      {% if lupa_img %}
+        <div class="text-start">
+          <img class="imagem-lupa-copia" 
+              style="margin-top: 15px; width:140px;" 
+              src="data:image/png;base64,{{ lupa_img }}" 
+              alt="Alto em">
+        </div>
+      {% endif %}  
+
+    </div>
+  </div>
+</div>	
+  </div>
+</div>	
+  </div>
+  <div class="col-md-2"></div>
+</div>	
+	
+<br><br><br>		
+
+<div class="container-botao">
+  <div class="d-flex justify-content-center">
+    <a class="btn btn-outline-secondary" href="{% url 'listaFichas' %}">Lista de Fichas</a>
+    <a class="btn btn-outline-secondary " href="{% url 'editarFicha1' fichaAtual.pk %}">Editar Base (1/3)</a>
+    <a class="btn btn-outline-secondary" href="{% url 'editarFicha2' fichaAtual.pk %}">Editar Receita (2/3)</a>
+    <a class="btn btn-outline-secondary" href="{% url 'editarFicha3' fichaAtual.pk %}">Editar Final (3/3)</a>
+    <form action="{% url 'deletarFicha' fichaAtual.pk %}" method="POST" style="display:inline"> {% csrf_token %}
+      <button type="submit" class="btn btn-outline-secondary " onclick="return confirm('Tem certeza que quer excluir a ficha?');">
+        Deletar ficha</button>
+    </form>
+  </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const botaoCopiar = document.getElementById('botaoCopiarTudo');
+        const conteudoParaCopiar = document.getElementById('conteudo-para-copiar');
+        
+        // Largura fixa desejada para o Docs
+        const larguraDesejada = 140; // px
+        
+        // Mantemos a referência ao estilo original do seu HTML
+        const estiloOriginalImagem = 'margin-top: 15px; width:140px;'; 
+
+        botaoCopiar.addEventListener('click', function() {
+            const imagensLupa = conteudoParaCopiar.querySelectorAll('.imagem-lupa-copia');
+            let imagensAlteradas = [];
+
+            // 1. CALCULAR E APLICAR DIMENSÕES EM CADA IMAGEM ENCONTRADA
+            imagensLupa.forEach(imagemLupa => {
+                // Captura as dimensões ATUAIS de exibição no navegador
+                const larguraOriginal = imagemLupa.naturalWidth || imagemLupa.width;
+                const alturaOriginal = imagemLupa.naturalHeight || imagemLupa.height;
+                
+                // Variável para guardar o estilo original (que é o mesmo para todas)
+                const estiloOriginal = imagemLupa.getAttribute('style') || estiloOriginalImagem;
+
+                // Calcula a nova ALTURA mantendo a proporção
+                let novaAltura = alturaOriginal;
+                
+                if (larguraOriginal > 0) {
+                    // Se a largura original for válida, calcula a nova altura
+                    const proporcao = alturaOriginal / larguraOriginal;
+                    novaAltura = larguraDesejada * proporcao;
+                }
+                
+                // Arredonda a nova altura para um número inteiro
+                novaAltura = Math.round(novaAltura);
+
+                // Aplica os atributos de tamanho INLINE para a cópia (Docs)
+                // A largura é fixa em 140. A altura é calculada.
+                imagemLupa.setAttribute('width', larguraDesejada);
+                imagemLupa.setAttribute('height', novaAltura);
+                
+                // Sobrescreve o estilo INLINE para garantir que o Docs pegue.
+                // Usamos o estilo original + as novas regras de width e height
+                imagemLupa.style.cssText = `${estiloOriginal}; width: ${larguraDesejada}px; height: ${novaAltura}px;`;
+
+                // Guarda a imagem e seu estilo original para a etapa de reversão
+                imagensAlteradas.push({ 
+                    element: imagemLupa, 
+                    originalStyle: estiloOriginal 
+                });
+            });
+
+            // 2. REALIZAR A CÓPIA
+            const range = document.createRange();
+            range.selectNode(conteudoParaCopiar);
+
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+
+            let textoOriginal = botaoCopiar.innerHTML;
+            let msg;
+
+            try {
+                const successful = document.execCommand('copy');
+                msg = successful ? 'Copiado com sucesso!' : 'Falha ao copiar.';
+            } catch (err) {
+                console.error('Erro ao tentar copiar:', err);
+                msg = 'Falha ao copiar.';
+            }
+
+            // 3. REVERTER AS ALTERAÇÕES DE TAMANHO
+            imagensAlteradas.forEach(item => {
+                // Remove os atributos de largura/altura adicionados para a cópia
+                item.element.removeAttribute('width');
+                item.element.removeAttribute('height');
+                
+                // Restaura o estilo original ('margin-top: 15px; width:140px;')
+                if (item.originalStyle) {
+                    item.element.setAttribute('style', item.originalStyle);
+                } else {
+                    item.element.removeAttribute('style');
+                }
+            });
+
+            // 4. FEEDBACK VISUAL
+            botaoCopiar.innerHTML = msg;
+            setTimeout(() => {
+                botaoCopiar.innerHTML = textoOriginal;
+            }, 2000);
+
+            window.getSelection().removeAllRanges();
+        });
+    });
+</script>
+
+{% endblock %}

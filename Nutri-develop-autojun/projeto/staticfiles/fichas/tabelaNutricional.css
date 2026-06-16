@@ -1,0 +1,107 @@
+/* TAGS */
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    font-size: 12px;
+}
+body{
+    background-color: lightgrey;
+}
+img{
+    margin-top: -7%;
+}
+header{
+    width: 100%;
+    min-height: 100px;
+    margin: 0;
+    background-color: rgb(167, 167, 167);
+}
+p, li{
+    text-align: center
+}
+table, th, td{
+    text-align: center;
+    width: 100%;
+    padding: 3px 15px;
+    border: 1px solid black;
+    font-size: 11px;
+}
+select{
+    width: 180px;
+}
+
+/* CLASS */
+.container{
+    padding: 0;
+    width: 80%;
+}
+.fundo{
+  background-color: white;
+  height: 100%;
+  padding-bottom: 50px;
+}
+.glyphicon-menu-hamburger{
+    font-size: 45px
+}
+.dropdown{
+    float: right;
+    margin: 2%;
+}
+.titulo h1{
+    border-bottom: 1px solid #A1CC3F;
+    width: fit-content;
+}
+.row .conteudo{
+    margin-top: 3%;
+}
+.glyphicon-trash{
+    font-size: 10px;
+}
+
+/* ID */
+#tabela{
+    overflow-y:auto;
+    width: 100%;
+    border: 2px solid lightgreen;
+}
+#seletor{
+    width: 78%;
+}
+#seletor:focus{
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#quantidade{
+    width: 55%;
+}
+#adicionar{
+    margin-left: 5%;
+    width: 30%;
+}
+#novo{
+    margin-left: 27%;
+}
+#nutriente{
+    width: 126px;
+}
+#real{
+    width: 85px;
+}
+#arredondada{
+    width: 85px;
+}
+#salvar{
+    padding: 2%;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+#cancelar{
+    padding: 1%;
+    border: 1px solid darkgrey;
+    border-radius: 2px;
+}
+#logo{
+	width: 200px;
+}

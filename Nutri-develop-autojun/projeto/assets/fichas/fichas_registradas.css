@@ -1,0 +1,125 @@
+
+.conteudo{
+    margin-top: 2%;
+}
+.glyphicon-trash{
+    font-size: 10px;
+}
+
+.glyphicon-eye-open{
+    font-size: 10px;
+    padding-right: 100%;
+}
+
+.col-md-8{
+    height: 10%;
+}
+.col-md-3{
+    height: fit-content;
+}
+.glyphicon-search{
+    font-size: 15px;
+    padding: 3px;
+}
+.glyphicon-plus{
+    font-size: 25px;
+}
+
+/*ID*/
+#tabela{
+    overflow-y:auto;
+    height: 100%;
+    width: 100%;
+    border: 2px solid lightgreen;
+}
+#salvar{
+    padding: 2%;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 15px;
+}
+#cancelar{
+    padding: 1%;
+    border: 1px solid darkgrey;
+    border-radius: 2px;
+}
+#input_buscar{
+    border: none;
+    box-shadow: none;
+    width: 82%;
+}
+#div_buscar{
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 100%;
+}
+#lupa, #plus{
+    background: none;
+    border: none;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+
+
+
+.btn {
+    height: 50%;
+    width: 85%;
+    position: relative;
+    top: 41%;
+    font-weight: 500;
+    font-size: small;
+}
+
+
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+  }
+
+.table{
+    width: 70%; 
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.row {
+    flex-wrap: unset;
+    padding-left: 0.5%;
+    width: 55%;
+    margin-left: 14%;
+    margin-right: 15%;
+}
+
+@media(max-width:1000px){
+    .table{
+        width: 95%; 
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+    } 
+    .row{
+        width: 73%;  
+        margin-left: 2.5%;
+    }
+    .btn{
+        width: 80%;
+        height: 48%;
+       
+    } 
+    .col-5{
+        padding-left: 0%;
+    }
+    .col-4{
+        padding-left: 2%;
+        padding-right: 0%;
+    }
+
+}
+
+
+
+

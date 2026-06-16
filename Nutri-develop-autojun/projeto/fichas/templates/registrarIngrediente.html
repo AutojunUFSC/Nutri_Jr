@@ -1,0 +1,249 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block principal %}
+<title>Registrar Ingrediente</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/registrarIngrediente.css' %}">
+
+<div class="row titulo">
+    <div class="col-md-0"></div>
+    <div class="col-md-4"><h1>Novo Ingrediente</h1></div>
+</div><br>
+
+{% if messages %}
+{% for message in messages %}
+<div class="row">
+  <div class="alert alert-danger">{{ message }}</div>
+</div><br>
+{% endfor %}
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-7">
+        {{ form.autorIng|bootstrap }}<br>
+        {{ form.nomeIng|bootstrap }}<br>
+        {{ form.composicao|bootstrap }}<br>
+      </div>  
+      <div class="col-7">  
+        {{ form.origemDosDados|bootstrap }}<br>
+        {{ form.dataCriacao|bootstrap }}
+      </div>
+    </div>
+  <br><hr><br>
+  <div class="row">
+      <div class="col-7">
+        <p style="text-align: justify; font-size: 1.4em;">Quanto desse ingrediente você está usando como referência para essa quantidade de nutrientes?</p>
+      </div>
+      <div class="col-7">
+        {{ form.qtdeDoIngrediente|bootstrap }} *Em gramas 
+    </div>
+  </div>
+  <br>
+
+  <div>
+    <table class="table table-striped">
+        <thead>
+          <tr style=" background-color: rgba(103, 172, 107, 0.342);">
+            <th style="width:50%;">Nutriente</th>
+            <th style="width:50%;">Quantidade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td style="width:50%;"><p>Proteína</p></td>
+              <td style="width:50%;">{{ form.proteinas|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td  style="width:50%;"><p>Lipídeos</p></td>
+              <td  style="width:50%;">{{ form.gordTotais|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td  style="width:50%;"><p>Carboidratos</p></td>
+              <td  style="width:50%;">{{ form.carboidratos|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Fibras</p></td>
+              <td style="width:50%;">{{ form.fibras|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td  style="width:50%;"><p>Energia (kcal)</p></td>
+              <td style="width:50%;">{{ form.energiakcal|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Energia (kJ)</p></td>
+              <td style="width:50%;">{{ form.energiaKJ|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Cálcio</p></td>
+              <td style="width:50%;">{{ form.calcio|bootstrap  }}</td>
+            </tr style="width:50%;">
+            <tr>
+              <td style="width:50%;"><p>Ferro</p></td>
+              <td style="width:50%;">{{ form.ferro|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Magnésio</p></td>
+              <td style="width:50%;">{{ form.magnesio|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Fósforo</p></td>
+              <td style="width:50%;">{{ form.fosforo|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Potássio</p></td>
+              <td style="width:50%;">{{ form.potassio|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Sódio</p></td>
+              <td style="width:50%;">{{ form.sodio|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Zinco</p></td>
+              <td style="width:50%;">{{ form.zinco|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Cobre</p></td>
+              <td style="width:50%;">{{ form.cobre|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Manganês</p></td>
+              <td style="width:50%;">{{ form.manganes|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Retinol</p></td>
+              <td style="width:50%;">{{ form.retinol|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>RE</p></td>
+              <td style="width:50%;">{{ form.RE|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Vitamina ARAE</p></td>
+              <td style="width:50%;">{{ form.vitaminaARAE|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Vitamina C</p></td>
+              <td style="width:50%;">{{ form.vitaminaC|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Tiamina</p></td>
+              <td style="width:50%;">{{ form.tiamina|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Riboflavina</p></td>
+              <td style="width:50%;">{{ form.riboflavina|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Niancina</p></td>
+              <td style="width:50%;">{{ form.niancina|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Piridoxina</p></td>
+              <td style="width:50%;">{{ form.piridoxina|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Gorduras Saturadas</p></td>
+              <td style="width:50%;">{{ form.gordSat|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Gorduras Trans</p></td>
+              <td style="width:50%;">{{ form.gordTrans|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Gorduras Polinsaturadas</p></td>
+              <td style="width:50%;">{{ form.gordPoli|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td  style="width:50%;"><p>Gorduras Monoinsaturadas</p></td>
+              <td style="width:50%;">{{ form.gordMono|bootstrap }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Colesterol</p></td>
+              <td style="width:50%;">{{ form.colesterol|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Açucares adicionais</p></td>
+              <td style="width:50%;">{{ form.acucaresadd|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Omega6</p></td>
+              <td style="width:50%;">{{ form.omega6|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Omega3</p></td>
+              <td style="width:50%;">{{ form.omega3|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Vitamina D</p></td>
+              <td style="width:50%;">{{ form.vitaminaD|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Vitamina E</p></td>
+              <td style="width:50%;">{{ form.vitaminaE|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Vitamina K</p></td>
+              <td style="width:50%;">{{ form.vitaminaK|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Biotina</p></td>
+              <td style="width:50%;">{{ form.biotina|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Acido folico</p></td>
+              <td style="width:50%;">{{ form.acidoFolico|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Acido pantotenico</p></td>
+              <td style="width:50%;">{{ form.acidoPantotenico|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Vitamina B12</p></td>
+              <td style="width:50%;">{{ form.vitaminaB12|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Cloreto</p></td>
+              <td style="width:50%;">{{ form.cloreto|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Cromo</p></td>
+              <td style="width:50%;">{{ form.cromo|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Fluor</p></td>
+              <td style="width:50%;">{{ form.fluor|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Iodo</p></td>
+              <td style="width:50%;">{{ form.iodo|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Molibdenio</p></td>
+              <td style="width:50%;">{{ form.molibdenio|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Selenio</p></td>
+              <td style="width:50%;">{{ form.selenio|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Colina</p></td>
+              <td style="width:50%;">{{ form.colina|bootstrap  }}</td>
+            </tr>
+            <tr>
+              <td style="width:50%;"><p>Açucares totais</p></td>
+              <td style="width:50%;">{{ form.acucaresTotais|bootstrap  }}</td>
+            </tr>
+        </tbody>
+      </table><br>
+      
+        <div class="col align-items-center d-flex justify-content-center">
+          <button class="btn btn-outline-secondary btn-lg"type="button" onclick="location.href = '{% url 'listaIngredientes' %}'" style="margin:0px 5px">Voltar</button>
+          <button type="submit" class="btn btn-outline-secondary btn-lg"  style="margin:0px 5px">Salvar e continuar</button>
+        </div>
+      </div><br><br>
+    </div>
+  </form>
+
+{% endblock %}

@@ -1,0 +1,110 @@
+/* TAGS */
+*{
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+}
+body{
+  background-color: #FFFFFF;
+}
+img{
+  margin-top: -7%;
+}
+header{
+  width: 100%;
+  min-height: 100px;
+  margin: 0;
+  background-color: #ACCF3D;
+}
+p, li{
+  text-align: center
+}
+
+​
+/* CLASS */
+.container{
+  padding: 0;
+  width: 80%;
+}
+.fundo{
+  background-color: white;
+  height: 100%;
+  padding-bottom: 50px;
+}
+.glyphicon{
+  font-size: 45px
+}
+.dropdown{
+  float: right;
+  margin: 2%;
+  margin-right: 5%;
+}
+.titulo h1{
+  border-bottom: 1px solid #A1CC3F;
+  width: fit-content;
+}
+.row .conteudo{
+  margin-top: 3%;
+}
+.botoes{
+  margin-right: 6%;
+  padding: 5%;
+  border: 1px solid black ;
+  border-radius: 5px;
+}
+​.centerBlock {
+  margin-left:auto;
+  margin-right:auto;
+  display:block;
+}
+​
+​
+#logo{
+width: 200px;
+}
+​
+#visualizacao{
+  font-size: 14px;
+  font-family: sans-serif
+}
+#visualizacao table, th, td{
+  overflow-y:auto;
+  width: 100%;
+  border: 1px solid black;
+  padding: 10px;
+}
+#visualizacao th{
+  font-weight: normal;
+}
+#visualizacao td{
+  text-align: center;
+  width: 30%;
+}
+#visualizacao td:first-child{
+  text-align: left;
+  width: 40%;
+}
+#ingredientes{
+  text-align: left;
+}
+
+#logo{
+	width: 200px;
+}
+#linear{
+  font-size: 12px;
+  text-align: left;
+}
+#tabela-nutri{
+  font-size: 12px;
+}
+
+#tabela-nutri td:first-child{
+  width: 30%;
+}
+#tabela-nutri td:nth-child(2){
+  width: 35%;
+}
+#tabela-nutri td:nth-child(3){
+  width: 35%;
+}

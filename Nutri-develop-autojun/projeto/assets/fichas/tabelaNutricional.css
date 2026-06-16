@@ -1,0 +1,112 @@
+
+.glyphicon-menu-hamburger{
+    font-size: 45px
+}
+
+.titulo h1{
+    border-bottom: 1px solid #A1CC3F;
+    width: fit-content;
+}
+
+.glyphicon-trash{
+    font-size: 10px;
+}
+
+hr{
+    margin-top: 0%;
+}
+
+.form-control {
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem 1rem;
+   /*  border: 1px solid #515a518f; */
+   font-size: 15px;
+
+}
+
+.form-group{
+    margin-bottom: 0%;
+    margin-top: 4%;
+}
+
+
+tbody {
+    height: 38px;
+    overflow-y: unset;
+}
+
+tbody td, thead th {
+    width: 16.65%; /*muda o tamanho dos valores na tabela parça */
+    float: left;
+}
+
+.table{
+    width: 70%; 
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.row {
+    flex-wrap: unset;
+    padding-left: 0.5%;
+    width: 53%;
+    margin-left: 28%;
+    margin-right: 37%;
+}
+
+.btn{
+    margin-top: 4%;
+    width: 100%; 
+}
+
+.tituloo h1, .tituloo h4{
+    border-bottom: 1px solid #A1CC3F;
+    width: fit-content;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.progresso{
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.progresso{
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+@media(max-width: 1000px){
+    .table{
+        width: 95%; 
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+    } 
+    .row{
+        width: 95%;  
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+    }
+    .col-10{
+        padding: 0;
+        margin-left: 7%;
+        margin-right: 7%;
+    }
+    .tituloo h1, .dados, .progresso{
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+    .progresso{
+        margin-left: 8%;
+        margin-right: 8%;
+    }
+}
+
+
+
+@media (max-width: 400px){
+    th{
+        font-size: 8px;
+        text-align: left;
+    }
+}

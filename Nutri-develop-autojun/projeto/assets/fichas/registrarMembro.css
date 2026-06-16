@@ -1,0 +1,144 @@
+/* TAGS */
+
+/* CLASS */
+.container{
+    background-color: white;
+    width: 80%;
+    padding-top: 5%;
+}
+
+/* ID */
+#logo{
+	width: 140px;
+}
+#titulo-cabecalho {
+  color: #F2F2F2;
+  font-weight: 900;
+  margin-left: 2%;
+}
+
+/* Coded with love by Mutiullah Samim */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* background: #383a3acb !important; */
+} 
+.user_card {
+    /* height: 400px; */
+    width: 350px;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: rgba(118, 196, 121, 0.342);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* border-radius: 5px; */
+
+}
+/*      .brand_logo_container {
+    position: absolute;
+    height: 170px;
+    width: 170px;
+    top: -75px;
+    border-radius: 100%;
+    background: #3c3d3d;
+    padding: 10px;
+    text-align: center;
+}
+.brand_logo {
+    height: 100%; 
+    width: 100%;
+    border-radius: 100%;
+    border: 2px solid white;
+}  */
+.form_container {
+    margin-top: 20%;
+}
+.login_btn {
+    width: 100%;
+    background: #c0392b !important;
+    color: white !important;
+}
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+.login_container {
+    padding: 0 2rem;
+}
+.input-group-text {
+    background: #c0392b !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.input_user,
+.input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+    background-color: #c0392b !important;
+}
+
+
+
+.form-control {
+    height: calc(1.8em + .75rem + 2px);
+    padding: .375rem 1rem;
+   /*  border: 1px solid #515a518f; */
+   font-size: 15px;
+
+}
+
+
+label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.cadastro{
+    text-align: center;
+    font-size: 2.5em;
+}
+
+
+@media (min-width: 2400px){
+    .form-control {
+        display: inline-block;
+        position: relative;
+        margin-left: 3%;
+        margin-right: 10%;
+        height: 90%;
+        padding: 0rem 0rem;
+        width: 60%;
+        left: 15%;
+        font-size: 15px;
+
+    }
+
+    label {
+        margin-left: 15%;
+        width: 70%;
+    }
+
+    p {
+        font-size: 50%;
+        position: absolute;
+        left: 13%;
+    }
+}
+ 
+@media (max-width: 1000px){
+    .cadastro{
+        font-size: 15px;
+    }
+}

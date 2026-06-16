@@ -1,0 +1,82 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% block principal %}
+<title>Fichas Registradas</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/fichas_registradas.css' %}">
+		<div class="row titulo">
+			<div class="col-md-0"></div>
+			<div class="col-md-4"><h1>Fichas Registradas</h1></div>
+		</div>
+		<br>
+
+	<div class=".flex-center">
+		<form method="post" novalidate>
+			{% csrf_token %}
+			<div class="row">
+				<div class="col-4">
+					{{ formFiltro.f_nomeFicha|bootstrap }}
+				</div>
+				<div class="col-4">
+					{{ formFiltro.f_cliente|bootstrap }}
+				</div>
+				<div class="col-4">
+					{{ formFiltro.f_autor|bootstrap }}
+				</div>
+				<div class="col-4">
+					<button type="submit" class="btn btn-secondary">Filtrar</button>
+				</div>
+			</div>
+			</form>
+		
+		
+			<table class="table table-striped mb-0" style="max-height: 350px; overflow-y: auto; display: block;">
+				<thead>
+					<tr style=" background-color: rgba(103, 172, 107, 0.342); text-align: center">
+						<th style="width:20%;">Receita</th>
+						<th>Criado em</th>
+						<th>Empresa</th>
+						<th>Autor</th>
+						<th style="width:10%; padding-left: 1.2%;">Ver</th>
+						<th style="padding-left: 3%;">Edição</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for ficha in fichas %}
+					<tr>
+						<td class="filterable-cell"  style="width:20%;">{{ ficha.nomeFicha }} {% if ficha.finalizada == 1 %} <i class="fa fa-check-circle" aria-hidden="true"></i> {% endif %}</td>
+            <td class="filterable-cell" style="text-align:center">     
+              {% if ficha.dataCriacao.day < 10 %}0{% endif %}{{ ficha.dataCriacao.day }}/{% if ficha.dataCriacao.month < 10 %}0{% endif %}{{ ficha.dataCriacao.month }}/{{ ficha.dataCriacao.year }}
+            </td>
+						<td class="filterable-cell" style="text-align:center">{{ ficha.cliente }}</td>
+						<td class="filterable-cell" style="text-align:center">{{ ficha.autor }}</td>
+						<td class="filterable-cell" style="width:10%;text-align:center">
+								<button type="button" class="btn btn-default"  style="text-align:center" onclick="location.href = '{% url 'fichaX' pk=ficha.pk %}'">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+								</button></td>
+						<td class="filterable-cell" style="padding-left: 3%;">
+								<a href="{% url 'editarFicha1' pk=ficha.pk %}">Editar Base (1/3)</a><br>
+								<a href="{% url 'editarFicha2' pk=ficha.pk %}">Editar Receita (2/3)</a><br>
+								<a href="{% url 'editarFicha3' pk=ficha.pk %}">Editar Tabela (3/3)</a>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+	</div>
+	<div class="row">
+		<div class="col" style="padding-top:4px">
+			<h5><i class="fa fa-check-circle" aria-hidden="true"></i> Fichas finalizadas</h5>
+		</div>
+	</div>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+	<div class="row ">
+		<div class="col-4">
+			<button class="btn btn-outline-secondary btn-lg" style="width: 150px; height: 100%;" type="button" onclick="location.href = '{% url 'registrarFicha1' %}'">Registrar Ficha</button>
+		</div>
+	</div>
+</form>
+
+{% endblock %}

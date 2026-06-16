@@ -1,0 +1,53 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+{% load bootstrap %}
+{% load trunca_numeros %}
+{% block principal %}
+<title>Receita</title>
+<link rel="stylesheet" type="text/css" href="{% static '/fichas/receita.css' %}">
+
+<div class="progress progresso">
+	<div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 50%;"></div>
+</div>
+
+
+<form class="align-self-center" method="post" action="{% url 'salvarReceita' %}">
+	{% csrf_token %}
+    <div class="row " style="display:block;align-items: center;justify-content: center; margin: auto">
+        <div class="col-10">
+            <input class="form-control" type="text" id="item_id" name="item_id" value="{{ item.id }}" hidden>
+            <input class="form-control" type="text" id="ficha_id" name="ficha_id" value="{{ item.ficha.pk }}" hidden>
+            
+            {% if item.ingrediente.nomeIng != None %}
+                <label class="control-label">Ingrediente:</label>
+                <input class="form-control" type="text"    id="nome" name="nome" value="{{ item.ingrediente.nomeIng }}" readonly>
+                <br style="line-height: 4em;">
+            {% endif %}
+            {% if item.nomeFantasia != None %}
+                <label class="control-label">Nome Fantasia:</label>
+                <input class="form-control" type="text"    id="nomeFantasia" name="nomeFantasia" value="{{ item.nomeFantasia }}">
+                <br> 
+            {% endif %}
+            {% if item.pesoBruto != None %}
+                <label class="control-label">Peso Bruto:</label>
+                <input class="form-control" type="number"    id="pesoBruto" name="pesoBruto" value="{{ item.pesoBruto }}">
+                <br>
+            {% endif %}
+            {% if item.pesoLiquido != None %}
+                <label class="control-label">Peso Liquido:</label>
+                <input class="form-control" type="number"    id="pesoLiquido" name="pesoLiquido" value="{{ item.pesoLiquido }}">
+                <br>
+            {% endif %}
+            {% if item.medidaCaseira != None %}
+                <label class="control-label">Medida Caseira:</label>
+                <input class="form-control" type="text"    id="medidaCaseira" name="medidaCaseira" value="{{ item.medidaCaseira }}">
+                <br>
+            {% endif %}
+                    
+            <button class="btn btn-outline-secondary btn-lg" type="submit">Atualizar</button><br><br>
+        </div>
+    </div>
+
+</form>
+
+{% endblock %}

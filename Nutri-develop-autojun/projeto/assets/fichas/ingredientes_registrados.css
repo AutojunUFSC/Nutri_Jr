@@ -1,0 +1,85 @@
+
+
+/* CLASS */
+
+.glyphicon-trash{
+    font-size: 12px;
+    float:left;
+    padding-left: 28%;
+}
+.glyphicon-cog{
+    font-size: 12px;
+    float:left;
+    padding-left: 20%;
+}
+
+.glyphicon-search{
+    font-size: 15px;
+    padding: 3px;
+}
+
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+.btn {
+    height: 50%;
+    width: 85%;
+    position: relative;
+    top: 41%;
+    font-weight: 500;
+    font-size: small;
+}
+
+
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+  }
+
+.table{
+    width: 70%; 
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.row {
+    flex-wrap: unset;
+    padding-left: 0.5%;
+    width: 55%;
+    margin-left: 14%;
+    margin-right: 15%;
+}
+
+
+
+@media(max-width:1000px){
+    .table{
+        width: 95%; 
+        margin-left: 2.5%;
+        margin-right: 2.5%;
+    } 
+    .row{
+        width: 73%;  
+        margin-left: 2.5%;
+    }
+    .btn{
+        width: 80%;
+        height: 48%;
+       
+    } 
+    .col-4{
+        padding-left: 2%;
+        padding-right: 0%;
+    }
+}
+
+
+@media (max-width: 400px){
+    th{
+        font-size: 8px;
+        text-align: left;
+    }
+    
+}
