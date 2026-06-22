@@ -10,3 +10,4 @@ Include/
 Lib/
 .venv
 pyvenv.cfg
+*.dump

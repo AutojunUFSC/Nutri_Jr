@@ -4,7 +4,7 @@ import sys
 
 if __name__ == '__main__':
     # Mudar a seguinte linha quando tiver tratando de configurações em Dev (nutri.settings.dev) ou em Produção (nutri.settings.prod)
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nutri.settings.prod')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nutri.settings.dev')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
