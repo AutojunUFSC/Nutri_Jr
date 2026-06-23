@@ -242,52 +242,53 @@ def attTabela(tabela, itensDaReceita, ficha):
   atualizaNutriente_100g(tabela, ficha)
 
   def atualizaNutriente_Porcao(tabela, ficha): # Atualiza o nutriente_Porcao, valor dinâmico que muda quando o nutriente_100g muda
-    tabela.proteinas_Porcao = (tabela.proteinas_100g / 100) * ficha.pesoPorcao
-    tabela.gordTotais_Porcao = (tabela.gordTotais_100g / 100) * ficha.pesoPorcao
-    tabela.carboidratos_Porcao = (tabela.carboidratos_100g / 100) * ficha.pesoPorcao
-    tabela.fibras_Porcao = (tabela.fibras_100g / 100) * ficha.pesoPorcao
-    tabela.energiakcal_Porcao = (tabela.energiakcal_100g / 100) * ficha.pesoPorcao
-    tabela.energiaKJ_Porcao = (tabela.energiaKJ_100g / 100) * ficha.pesoPorcao
-    tabela.calcio_Porcao = (tabela.calcio_100g / 100) * ficha.pesoPorcao
-    tabela.ferro_Porcao = (tabela.ferro_100g / 100) * ficha.pesoPorcao
-    tabela.magnesio_Porcao = (tabela.magnesio_100g / 100) * ficha.pesoPorcao
-    tabela.fosforo_Porcao = (tabela.fosforo_100g / 100) * ficha.pesoPorcao
-    tabela.potassio_Porcao = (tabela.potassio_100g / 100) * ficha.pesoPorcao
-    tabela.sodio_Porcao = (tabela.sodio_100g / 100) * ficha.pesoPorcao
-    tabela.zinco_Porcao = (tabela.zinco_100g / 100) * ficha.pesoPorcao
-    tabela.cobre_Porcao = (tabela.cobre_100g / 100) * ficha.pesoPorcao
-    tabela.manganes_Porcao = (tabela.manganes_100g / 100) * ficha.pesoPorcao
-    tabela.retinol_Porcao = (tabela.retinol_100g / 100) * ficha.pesoPorcao
-    tabela.RE_Porcao = (tabela.RE_100g / 100) * ficha.pesoPorcao
-    tabela.vitaminaARAE_Porcao = (tabela.vitaminaARAE_100g / 100) * ficha.pesoPorcao
-    tabela.vitaminaC_Porcao = (tabela.vitaminaC_100g / 100) * ficha.pesoPorcao
-    tabela.tiamina_Porcao = (tabela.tiamina_100g / 100) * ficha.pesoPorcao
-    tabela.riboflavina_Porcao = (tabela.riboflavina_100g / 100) * ficha.pesoPorcao
-    tabela.niancina_Porcao = (tabela.niancina_100g / 100) * ficha.pesoPorcao
-    tabela.piridoxina_Porcao = (tabela.piridoxina_100g / 100) * ficha.pesoPorcao
-    tabela.gordSat_Porcao = (tabela.gordSat_100g / 100) * ficha.pesoPorcao
-    tabela.gordTrans_Porcao = (tabela.gordTrans_100g / 100) * ficha.pesoPorcao
-    tabela.gordPoli_Porcao = (tabela.gordPoli_100g / 100) * ficha.pesoPorcao
-    tabela.gordMono_Porcao = (tabela.gordMono_100g / 100) * ficha.pesoPorcao
-    tabela.colesterol_Porcao = (tabela.colesterol_100g / 100) * ficha.pesoPorcao
-    tabela.acucaresadd_Porcao = (tabela.acucaresadd_100g / 100) * ficha.pesoPorcao
-    tabela.omega6_Porcao = (tabela.omega6_100g / 100) * ficha.pesoPorcao
-    tabela.omega3_Porcao = (tabela.omega3_100g / 100) * ficha.pesoPorcao
-    tabela.vitaminaD_Porcao = (tabela.vitaminaD_100g / 100) * ficha.pesoPorcao
-    tabela.vitaminaE_Porcao = (tabela.vitaminaE_100g / 100) * ficha.pesoPorcao
-    tabela.vitaminaK_Porcao = (tabela.vitaminaK_100g / 100) * ficha.pesoPorcao
-    tabela.biotina_Porcao = (tabela.biotina_100g / 100) * ficha.pesoPorcao
-    tabela.acidoFolico_Porcao = (tabela.acidoFolico_100g / 100) * ficha.pesoPorcao
-    tabela.acidoPantotenico_Porcao = (tabela.acidoPantotenico_100g / 100) * ficha.pesoPorcao
-    tabela.vitaminaB12_Porcao = (tabela.vitaminaB12_100g / 100) * ficha.pesoPorcao
-    tabela.cloreto_Porcao = (tabela.cloreto_100g / 100) * ficha.pesoPorcao
-    tabela.cromo_Porcao = (tabela.cromo_100g / 100) * ficha.pesoPorcao
-    tabela.fluor_Porcao = (tabela.fluor_100g / 100) * ficha.pesoPorcao
-    tabela.iodo_Porcao = (tabela.iodo_100g / 100) * ficha.pesoPorcao
-    tabela.molibdenio_Porcao = (tabela.molibdenio_100g / 100) * ficha.pesoPorcao
-    tabela.selenio_Porcao = (tabela.selenio_100g / 100) * ficha.pesoPorcao
-    tabela.colina_Porcao = (tabela.colina_100g / 100) * ficha.pesoPorcao
-    tabela.acucaresTotais_Porcao = (tabela.acucaresTotais_100g / 100) * ficha.pesoPorcao
+    peso_por_porção = ficha.pesoAnvisa or ficha.pesoPorcao
+    tabela.proteinas_Porcao = (tabela.proteinas_100g / 100) * peso_por_porção
+    tabela.gordTotais_Porcao = (tabela.gordTotais_100g / 100) * peso_por_porção
+    tabela.carboidratos_Porcao = (tabela.carboidratos_100g / 100) * peso_por_porção
+    tabela.fibras_Porcao = (tabela.fibras_100g / 100) * peso_por_porção
+    tabela.energiakcal_Porcao = (tabela.energiakcal_100g / 100) * peso_por_porção
+    tabela.energiaKJ_Porcao = (tabela.energiaKJ_100g / 100) * peso_por_porção
+    tabela.calcio_Porcao = (tabela.calcio_100g / 100) * peso_por_porção
+    tabela.ferro_Porcao = (tabela.ferro_100g / 100) * peso_por_porção
+    tabela.magnesio_Porcao = (tabela.magnesio_100g / 100) * peso_por_porção
+    tabela.fosforo_Porcao = (tabela.fosforo_100g / 100) * peso_por_porção
+    tabela.potassio_Porcao = (tabela.potassio_100g / 100) * peso_por_porção
+    tabela.sodio_Porcao = (tabela.sodio_100g / 100) * peso_por_porção
+    tabela.zinco_Porcao = (tabela.zinco_100g / 100) * peso_por_porção
+    tabela.cobre_Porcao = (tabela.cobre_100g / 100) * peso_por_porção
+    tabela.manganes_Porcao = (tabela.manganes_100g / 100) * peso_por_porção
+    tabela.retinol_Porcao = (tabela.retinol_100g / 100) * peso_por_porção
+    tabela.RE_Porcao = (tabela.RE_100g / 100) * peso_por_porção
+    tabela.vitaminaARAE_Porcao = (tabela.vitaminaARAE_100g / 100) * peso_por_porção
+    tabela.vitaminaC_Porcao = (tabela.vitaminaC_100g / 100) * peso_por_porção
+    tabela.tiamina_Porcao = (tabela.tiamina_100g / 100) * peso_por_porção
+    tabela.riboflavina_Porcao = (tabela.riboflavina_100g / 100) * peso_por_porção
+    tabela.niancina_Porcao = (tabela.niancina_100g / 100) * peso_por_porção
+    tabela.piridoxina_Porcao = (tabela.piridoxina_100g / 100) * peso_por_porção
+    tabela.gordSat_Porcao = (tabela.gordSat_100g / 100) * peso_por_porção
+    tabela.gordTrans_Porcao = (tabela.gordTrans_100g / 100) * peso_por_porção
+    tabela.gordPoli_Porcao = (tabela.gordPoli_100g / 100) * peso_por_porção
+    tabela.gordMono_Porcao = (tabela.gordMono_100g / 100) * peso_por_porção
+    tabela.colesterol_Porcao = (tabela.colesterol_100g / 100) * peso_por_porção
+    tabela.acucaresadd_Porcao = (tabela.acucaresadd_100g / 100) * peso_por_porção
+    tabela.omega6_Porcao = (tabela.omega6_100g / 100) * peso_por_porção
+    tabela.omega3_Porcao = (tabela.omega3_100g / 100) * peso_por_porção
+    tabela.vitaminaD_Porcao = (tabela.vitaminaD_100g / 100) * peso_por_porção
+    tabela.vitaminaE_Porcao = (tabela.vitaminaE_100g / 100) * peso_por_porção
+    tabela.vitaminaK_Porcao = (tabela.vitaminaK_100g / 100) * peso_por_porção
+    tabela.biotina_Porcao = (tabela.biotina_100g / 100) * peso_por_porção
+    tabela.acidoFolico_Porcao = (tabela.acidoFolico_100g / 100) * peso_por_porção
+    tabela.acidoPantotenico_Porcao = (tabela.acidoPantotenico_100g / 100) * peso_por_porção
+    tabela.vitaminaB12_Porcao = (tabela.vitaminaB12_100g / 100) * peso_por_porção
+    tabela.cloreto_Porcao = (tabela.cloreto_100g / 100) * peso_por_porção
+    tabela.cromo_Porcao = (tabela.cromo_100g / 100) * peso_por_porção
+    tabela.fluor_Porcao = (tabela.fluor_100g / 100) * peso_por_porção
+    tabela.iodo_Porcao = (tabela.iodo_100g / 100) * peso_por_porção
+    tabela.molibdenio_Porcao = (tabela.molibdenio_100g / 100) * peso_por_porção
+    tabela.selenio_Porcao = (tabela.selenio_100g / 100) * peso_por_porção
+    tabela.colina_Porcao = (tabela.colina_100g / 100) * peso_por_porção
+    tabela.acucaresTotais_Porcao = (tabela.acucaresTotais_100g / 100) * peso_por_porção
 
     tabela.save()
   atualizaNutriente_Porcao(tabela, ficha)
@@ -866,7 +867,7 @@ def fichaX(request, pk):
   tabelaAtual = Tabela.objects.get(pk = pk)
   vd_trans = 0
 
-  unidadesAnvisa = "{:.2f}".format((fichaAtual.pesoPorcao or 0) / (fichaAtual.pesoAnvisa or 1))\
+  unidadesAnvisa = "{:.2f}".format((fichaAtual.pesoAnvisa or 0) / (fichaAtual.pesoPorcao or fichaAtual.pesoAnvisa or 1))\
     .replace('.', ',')\
     .rstrip('0')\
     .rstrip(',')
@@ -1079,13 +1080,13 @@ def fichaX(request, pk):
     return textoOrdenado.capitalize()
   ordemIngredientesFront = ordenarIngredientesPorQuantidade(tabela=tabelaAtual)
 
-  pesoPorcaoSemZero = tira_zero(int(fichaAtual.pesoPorcao))
+  pesoAnvisaSemZero = tira_zero(int(fichaAtual.pesoAnvisa or fichaAtual.pesoPorcao))
   identados = ["Açúcares totais", "Açúcares adicionados", "Gorduras Saturadas", "Gorduras Trans", "Gorduras monosaturadas", "Gorduras polissaturadas", "Colesterol"]
   
   return render(request, 'fichax.html', {
     'fichaAtual': fichaAtual,
     'unidadesAnvisa': unidadesAnvisa,
-    'pesoPorcaoSemZero': pesoPorcaoSemZero, 
+    'pesoAnvisaSemZero': pesoAnvisaSemZero, 
     'tabelaAtual': tabelaAtual, 
     'nutrientesFinais': nutrientesFront, 
     'nutrientesFinais1': nutrientesFront1, 

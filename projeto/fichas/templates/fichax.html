@@ -61,7 +61,7 @@
           <hr class="linha-cabeca1">
           <div id="esquerda">
             Porções por embalagem: {{ fichaAtual.numPorcoes }} {% if fichaAtual.numPorcoes == 1 %}porção{% else %}porções{% endif %} <br>
-            Porção: {{ pesoPorcaoSemZero }}g ({{unidadesAnvisa}} {{ fichaAtual.medCaseiraPorcao }})
+            Porção: {{ pesoAnvisaSemZero }}g ({{unidadesAnvisa}} {{ fichaAtual.medCaseiraPorcao }})
           </div>
           <hr class="linha-cabeca2">
         </td>
@@ -69,7 +69,7 @@
       <tr>
         <td class="primeira-coluna">ㅤ</td> <!-- Espaço em branco para poder selecionar certinho --> 
         <td><b style="font-size: 10.5px;">100g</b></td>
-        <td><b style="font-size: 10.5px;">{{ pesoPorcaoSemZero }}g</b></td>
+        <td><b style="font-size: 10.5px;">{{ pesoAnvisaSemZero }}g</b></td>
         <td><b style="font-size: 10.5px;">%VD*</b></td>
       </tr>
 
@@ -121,7 +121,7 @@
           <b><strong style="font-size: 13px;">INFORMAÇÃO NUTRICIONAL</strong></b><br>
           <hr class="linha-cabeca1">
           Porções por embalagem: {{ fichaAtual.numPorcoes }} porção <b>•</b> 
-          Porção: {{ pesoPorcaoSemZero }}g ({{ fichaAtual.medCaseiraPorcao }})
+          Porção: {{ pesoAnvisaSemZero }}g ({{ unidadesAnvisa }} {{ fichaAtual.medCaseiraPorcao }})
           <hr class="linha-cabeca2">
         </div>
       </td>
@@ -129,7 +129,7 @@
     <tr>
       <td colspan="4">
         <p style="text-align: justify; font-size:10.5px;">
-          Por 100g (<b style="font-size:10.5px;">{{ fichaAtual.pesoPorcao }}g</b>, %VD*):
+          Por 100g (<b style="font-size:10.5px;">{{ fichaAtual.pesoAnvisa }}g</b>, %VD*):
           {% for nutrienteFinal in nutrientesFinais %}
             {% if nutrienteFinal.0 not in identados %}
               {% if nutrienteFinal.0 == "Fibra alimentar" or nutrienteFinal.0 == "Proteínas" %} <b>•</b> {% endif %}
