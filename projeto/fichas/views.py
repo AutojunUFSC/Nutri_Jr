@@ -552,8 +552,8 @@ def attTabela(tabela, itensDaReceita, ficha):
 
   # Atualiza outros valores dinâmicos
   ficha.pesoLiquidoPreparacao = somaPesoLiquido
-  if ficha.pesoPorcao and ficha.pesoAnvisa:
-    ficha.numPorcoes = int(ficha.pesoPorcao / ficha.pesoAnvisa)
+  if ficha.pesoTotal and ficha.pesoAnvisa:
+    ficha.numPorcoes = int(ficha.pesoTotal / ficha.pesoAnvisa)
   else:
     ficha.numPorcoes = 0
   ficha.save()
@@ -914,6 +914,35 @@ def fichaX(request, pk):
       VD = VD.replace('.',',')
       return VD
 
+  # Calcula e formata o número de porções por embalagem segundo as regras da ANVISA:
+  # - número exato -> valor inteiro ("10 porções")
+  # - quebrado e > 3 porções -> arredonda pro inteiro mais próximo, precedido de "Cerca de"
+  # - quebrado e <= 3 porções -> arredonda pro quarto (1/4) mais próximo, em número misto ("1 e 1/2 porções")
+  def calcularNumPorcoes(pesoTotal, pesoAnvisa):
+    if not pesoTotal or not pesoAnvisa:
+      return "0 porções"
+
+    porcoes = pesoTotal / pesoAnvisa
+
+    def pluralComContagem(valor):
+      inteiro = round(valor)
+      return f"{inteiro} {'porção' if inteiro == 1 else 'porções'}"
+
+    if abs(porcoes - round(porcoes)) < 0.001:
+      return pluralComContagem(porcoes)
+
+    if porcoes > 3:
+      return f"Cerca de {pluralComContagem(porcoes)}"
+
+    quartos = round(porcoes * 4)
+    inteiro, resto = divmod(quartos, 4)
+    fracoesTexto = {1: "1/4", 2: "1/2", 3: "3/4"}
+    if resto == 0:
+      return pluralComContagem(inteiro)
+    if inteiro == 0:
+      return f"{fracoesTexto[resto]} porção"
+    return f"{inteiro} e {fracoesTexto[resto]} porções"
+
   # Faz uma lista com a linhas que serão futuramente mostradas no front
   def montarTabelaFinal(tabela):
     nutrientesFinais = []
@@ -1084,13 +1113,15 @@ def fichaX(request, pk):
   ordemIngredientesFront = ordenarIngredientesPorQuantidade(tabela=tabelaAtual)
 
   pesoAnvisaSemZero = tira_zero(int(fichaAtual.pesoAnvisa or fichaAtual.pesoPorcao))
+  numPorcoesExibicao = calcularNumPorcoes(fichaAtual.pesoTotal, fichaAtual.pesoAnvisa)
   identados = ["Açúcares totais", "Açúcares adicionados", "Gorduras Saturadas", "Gorduras Trans", "Gorduras monosaturadas", "Gorduras polissaturadas", "Colesterol"]
   
   return render(request, 'fichax.html', {
     'fichaAtual': fichaAtual,
     'unidadesAnvisa': unidadesAnvisa,
-    'pesoAnvisaSemZero': pesoAnvisaSemZero, 
-    'tabelaAtual': tabelaAtual, 
+    'pesoAnvisaSemZero': pesoAnvisaSemZero,
+    'numPorcoesExibicao': numPorcoesExibicao,
+    'tabelaAtual': tabelaAtual,
     'nutrientesFinais': nutrientesFront, 
     'nutrientesFinais1': nutrientesFront1, 
     'nutrientesFinaisTrans': nutrientesFrontTrans, 

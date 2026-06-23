@@ -60,7 +60,7 @@
           <b><strong>INFORMAÇÃO NUTRICIONAL</strong></b><br>
           <hr class="linha-cabeca1">
           <div id="esquerda">
-            Porções por embalagem: {{ fichaAtual.numPorcoes }} {% if fichaAtual.numPorcoes == 1 %}porção{% else %}porções{% endif %} <br>
+            Porções por embalagem: {{ numPorcoesExibicao }} <br>
             Porção: {{ pesoAnvisaSemZero }}g ({{unidadesAnvisa}} {{ fichaAtual.medCaseiraPorcao }})
           </div>
           <hr class="linha-cabeca2">
@@ -120,7 +120,7 @@
         <div id="esquerda">
           <b><strong style="font-size: 13px;">INFORMAÇÃO NUTRICIONAL</strong></b><br>
           <hr class="linha-cabeca1">
-          Porções por embalagem: {{ fichaAtual.numPorcoes }} porção <b>•</b> 
+          Porções por embalagem: {{ numPorcoesExibicao }} <b>•</b>
           Porção: {{ pesoAnvisaSemZero }}g ({{ unidadesAnvisa }} {{ fichaAtual.medCaseiraPorcao }})
           <hr class="linha-cabeca2">
         </div>
