@@ -552,7 +552,10 @@ def attTabela(tabela, itensDaReceita, ficha):
 
   # Atualiza outros valores dinâmicos
   ficha.pesoLiquidoPreparacao = somaPesoLiquido
-  ficha.numPorcoes = ficha.pesoTotal / ficha.pesoPorcao
+  if ficha.pesoPorcao and ficha.pesoAnvisa:
+    ficha.numPorcoes = int(ficha.pesoPorcao / ficha.pesoAnvisa)
+  else:
+    ficha.numPorcoes = 0
   ficha.save()
 
   def atualizaValorDiario(tabela): # Atualiza % de Valor Diário com (%VD) de Referência para uma dieta de 2000kcal 
