@@ -131,8 +131,6 @@ def attTabela(tabela, itensDaReceita, ficha):
       tabela.gordTotais += (itemReceita.ingrediente.gordTotais_100g / 100) * itemReceita.pesoLiquido
       tabela.carboidratos += (itemReceita.ingrediente.carboidratos_100g / 100) * itemReceita.pesoLiquido
       tabela.fibras += (itemReceita.ingrediente.fibras_100g / 100) * itemReceita.pesoLiquido
-      tabela.energiakcal += (itemReceita.ingrediente.energiakcal_100g / 100) * itemReceita.pesoLiquido
-      tabela.energiaKJ += (itemReceita.ingrediente.energiaKJ_100g / 100) * itemReceita.pesoLiquido
       tabela.calcio += (itemReceita.ingrediente.calcio_100g / 100) * itemReceita.pesoLiquido
       tabela.ferro += (itemReceita.ingrediente.ferro_100g / 100) * itemReceita.pesoLiquido
       tabela.magnesio += (itemReceita.ingrediente.magnesio_100g / 100) * itemReceita.pesoLiquido
@@ -174,13 +172,14 @@ def attTabela(tabela, itensDaReceita, ficha):
       tabela.colina += (itemReceita.ingrediente.colina_100g / 100) * itemReceita.pesoLiquido
       tabela.acucaresTotais += (itemReceita.ingrediente.acucaresTotais_100g / 100) * itemReceita.pesoLiquido
 
-      if tabela.energiaKJ == 0 and tabela.energiakcal != 0:
-        tabela.energiaKJ = tabela.energiakcal * 4.184
-      if tabela.energiaKJ != 0 and tabela.energiakcal == 0:
-        tabela.energiakcal = tabela.energiaKJ / 4.184
-
     tabela.save()
   adicionaValoresComBaseNaReceita(tabela, itensDaReceita)
+
+  def calculaEnergiaAtwater(tabela): # Calcula o valor energético a partir dos macronutrientes da receita (Proteínas*4 + Carboidratos*4 + Gorduras*9)
+    tabela.energiakcal = (tabela.proteinas * 4) + (tabela.carboidratos * 4) + (tabela.gordTotais * 9)
+    tabela.energiaKJ = tabela.energiakcal * 4.184
+    tabela.save()
+  calculaEnergiaAtwater(tabela)
 
   def somaPesoLiquidoDaReceita(itensDaReceita): # Faz a soma do Peso liquido da receita
     soma = 0
