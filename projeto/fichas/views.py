@@ -870,10 +870,19 @@ def fichaX(request, pk):
   tabelaAtual = Tabela.objects.get(pk = pk)
   vd_trans = 0
 
-  unidadesAnvisa = "{:.2f}".format((fichaAtual.pesoAnvisa or 0) / (fichaAtual.pesoPorcao or fichaAtual.pesoAnvisa or 1))\
-    .replace('.', ',')\
-    .rstrip('0')\
-    .rstrip(',')
+  # Converte um número decimal pro quarto (1/4) mais próximo, em número misto (ex: 8,49 -> "8 e 1/2")
+  def formatarFracaoMista(valor):
+    quartos = round(valor * 4)
+    inteiro, resto = divmod(quartos, 4)
+    if resto == 0:
+      return str(inteiro)
+
+    fracoesTexto = {1: "1/4", 2: "1/2", 3: "3/4"}
+    if inteiro == 0:
+      return fracoesTexto[resto]
+    return f"{inteiro} e {fracoesTexto[resto]}"
+
+  unidadesAnvisa = formatarFracaoMista((fichaAtual.pesoAnvisa or 0) / (fichaAtual.pesoPorcao or fichaAtual.pesoAnvisa or 1))
 
   # Lógica da lupa "alto em"
   nutrientes_altos = tabelaAtual.nutrientes_altos()
