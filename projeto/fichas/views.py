@@ -21,6 +21,41 @@ import pdb # Para debugar use pdb.set_trace()
 import logging
 logger = logging.getLogger(__name__)
 
+def round_half_down(n, decimals=0):
+    # Arredondada pra baixo quando na metade: Ex: 32,4 -> 32 ; 32,5 -> 32 ; 32,6 -> 33
+    multiplier = 10 ** decimals
+    return math.ceil(n * multiplier - 0.5) / multiplier
+
+def arredondaNutriente_ANVISA(condicaoParaZero, valor, unidade):
+    if condicaoParaZero:
+        return 0.0
+    
+    if valor is None:
+        return 0.0
+        
+    unidade = (unidade or '').strip()
+    
+    # Regra: kcal/kJ -> inteiro
+    if unidade in ('kcal', 'kJ'):
+        return round_half_down(valor, 0)
+    
+    # Regra: ≥10 -> inteiro
+    if valor >= 10:
+        return round_half_down(valor, 0)
+    
+    # Regra: ≥1 e <10 -> 1 casa
+    elif valor >= 1:
+        return round_half_down(valor, 1)
+    
+    # Regra: <1 -> 1 casa para g, 2 casas para mg/μg
+    else: # valor < 1
+        if unidade == 'g':
+            return round_half_down(valor, 1)
+        elif unidade in ('mg', 'μg', 'ug'):
+            return round_half_down(valor, 2)
+        else:
+            return round_half_down(valor, 2)
+
 ### VIEWS DAS FICHAS ###
 # Ativada pela URL 'listaFichas'. Lista as fichas de acordo com os filtros.
 @login_required(login_url='loginUser')
@@ -189,53 +224,101 @@ def attTabela(tabela, itensDaReceita, ficha):
   somaPesoLiquido = somaPesoLiquidoDaReceita(itensDaReceita)
 
   def atualizaNutriente_100g(tabela, ficha): # Atualiza o nutriente_100g, valor dinâmico que muda quando a receita muda
-    tabela.proteinas_100g = (tabela.proteinas * 100) / ficha.pesoTotal
-    tabela.gordTotais_100g = (tabela.gordTotais * 100) / ficha.pesoTotal
-    tabela.carboidratos_100g = (tabela.carboidratos * 100) / ficha.pesoTotal
-    tabela.fibras_100g = (tabela.fibras * 100) / ficha.pesoTotal
-    tabela.energiakcal_100g = (tabela.energiakcal * 100) / ficha.pesoTotal
-    tabela.energiaKJ_100g = (tabela.energiaKJ * 100) / ficha.pesoTotal
-    tabela.calcio_100g = (tabela.calcio * 100) / ficha.pesoTotal
-    tabela.ferro_100g = (tabela.ferro * 100) / ficha.pesoTotal
-    tabela.magnesio_100g = (tabela.magnesio * 100) / ficha.pesoTotal
-    tabela.fosforo_100g = (tabela.fosforo * 100) / ficha.pesoTotal
-    tabela.potassio_100g = (tabela.potassio * 100) / ficha.pesoTotal
-    tabela.sodio_100g = (tabela.sodio * 100) / ficha.pesoTotal
-    tabela.zinco_100g = (tabela.zinco * 100) / ficha.pesoTotal
-    tabela.cobre_100g = (tabela.cobre * 100) / ficha.pesoTotal
-    tabela.manganes_100g = (tabela.manganes * 100) / ficha.pesoTotal
-    tabela.retinol_100g = (tabela.retinol * 100) / ficha.pesoTotal
-    tabela.RE_100g = (tabela.RE * 100) / ficha.pesoTotal
-    tabela.vitaminaARAE_100g = (tabela.vitaminaARAE * 100) / ficha.pesoTotal
-    tabela.vitaminaC_100g = (tabela.vitaminaC * 100) / ficha.pesoTotal
-    tabela.tiamina_100g = (tabela.tiamina * 100) / ficha.pesoTotal
-    tabela.riboflavina_100g = (tabela.riboflavina * 100) / ficha.pesoTotal
-    tabela.niancina_100g = (tabela.niancina * 100) / ficha.pesoTotal
-    tabela.piridoxina_100g = (tabela.piridoxina * 100) / ficha.pesoTotal
-    tabela.gordSat_100g = (tabela.gordSat * 100) / ficha.pesoTotal
-    tabela.gordTrans_100g = (tabela.gordTrans * 100) / ficha.pesoTotal
-    tabela.gordPoli_100g = (tabela.gordPoli * 100) / ficha.pesoTotal
-    tabela.gordMono_100g = (tabela.gordMono * 100) / ficha.pesoTotal
-    tabela.colesterol_100g = (tabela.colesterol * 100) / ficha.pesoTotal
-    tabela.acucaresadd_100g = (tabela.acucaresadd * 100) / ficha.pesoTotal
-    tabela.omega6_100g = (tabela.omega6 * 100) / ficha.pesoTotal
-    tabela.omega3_100g = (tabela.omega3 * 100) / ficha.pesoTotal
-    tabela.vitaminaD_100g = (tabela.vitaminaD * 100) / ficha.pesoTotal
-    tabela.vitaminaE_100g = (tabela.vitaminaE * 100) / ficha.pesoTotal
-    tabela.vitaminaK_100g = (tabela.vitaminaK * 100) / ficha.pesoTotal
-    tabela.acidoFolico_100g = (tabela.acidoFolico * 100) / ficha.pesoTotal
-    tabela.acidoPantotenico_100g = (tabela.acidoPantotenico * 100) / ficha.pesoTotal
-    tabela.vitaminaB12_100g = (tabela.vitaminaB12 * 100) / ficha.pesoTotal
-    tabela.cloreto_100g = (tabela.cloreto * 100) / ficha.pesoTotal
-    tabela.cromo_100g = (tabela.cromo * 100) / ficha.pesoTotal
-    tabela.fluor_100g = (tabela.fluor * 100) / ficha.pesoTotal
-    tabela.iodo_100g = (tabela.iodo * 100) / ficha.pesoTotal
-    tabela.molibdenio_100g = (tabela.molibdenio * 100) / ficha.pesoTotal
-    tabela.selenio_100g = (tabela.selenio * 100) / ficha.pesoTotal
-    tabela.colina_100g = (tabela.colina * 100) / ficha.pesoTotal
-    tabela.biotina_100g = (tabela.biotina * 100) / ficha.pesoTotal
-    tabela.acucaresTotais_100g = (tabela.acucaresTotais * 100) / ficha.pesoTotal
-
+    peso = ficha.pesoTotal
+    if peso and peso > 0:
+      tabela.proteinas_100g = (tabela.proteinas * 100) / peso
+      tabela.gordTotais_100g = (tabela.gordTotais * 100) / peso
+      tabela.carboidratos_100g = (tabela.carboidratos * 100) / peso
+      tabela.fibras_100g = (tabela.fibras * 100) / peso
+      tabela.energiakcal_100g = (tabela.energiakcal * 100) / peso
+      tabela.energiaKJ_100g = (tabela.energiaKJ * 100) / peso
+      tabela.calcio_100g = (tabela.calcio * 100) / peso
+      tabela.ferro_100g = (tabela.ferro * 100) / peso
+      tabela.magnesio_100g = (tabela.magnesio * 100) / peso
+      tabela.fosforo_100g = (tabela.fosforo * 100) / peso
+      tabela.potassio_100g = (tabela.potassio * 100) / peso
+      tabela.sodio_100g = (tabela.sodio * 100) / peso
+      tabela.zinco_100g = (tabela.zinco * 100) / peso
+      tabela.cobre_100g = (tabela.cobre * 100) / peso
+      tabela.manganes_100g = (tabela.manganes * 100) / peso
+      tabela.retinol_100g = (tabela.retinol * 100) / peso
+      tabela.RE_100g = (tabela.RE * 100) / peso
+      tabela.vitaminaARAE_100g = (tabela.vitaminaARAE * 100) / peso
+      tabela.vitaminaC_100g = (tabela.vitaminaC * 100) / peso
+      tabela.tiamina_100g = (tabela.tiamina * 100) / peso
+      tabela.riboflavina_100g = (tabela.riboflavina * 100) / peso
+      tabela.niancina_100g = (tabela.niancina * 100) / peso
+      tabela.piridoxina_100g = (tabela.piridoxina * 100) / peso
+      tabela.gordSat_100g = (tabela.gordSat * 100) / peso
+      tabela.gordTrans_100g = (tabela.gordTrans * 100) / peso
+      tabela.gordPoli_100g = (tabela.gordPoli * 100) / peso
+      tabela.gordMono_100g = (tabela.gordMono * 100) / peso
+      tabela.colesterol_100g = (tabela.colesterol * 100) / peso
+      tabela.acucaresadd_100g = (tabela.acucaresadd * 100) / peso
+      tabela.omega6_100g = (tabela.omega6 * 100) / peso
+      tabela.omega3_100g = (tabela.omega3 * 100) / peso
+      tabela.vitaminaD_100g = (tabela.vitaminaD * 100) / peso
+      tabela.vitaminaE_100g = (tabela.vitaminaE * 100) / peso
+      tabela.vitaminaK_100g = (tabela.vitaminaK * 100) / peso
+      tabela.biotina_100g = (tabela.biotina * 100) / peso
+      tabela.acidoFolico_100g = (tabela.acidoFolico * 100) / peso
+      tabela.acidoPantotenico_100g = (tabela.acidoPantotenico * 100) / peso
+      tabela.vitaminaB12_100g = (tabela.vitaminaB12 * 100) / peso
+      tabela.cloreto_100g = (tabela.cloreto * 100) / peso
+      tabela.cromo_100g = (tabela.cromo * 100) / peso
+      tabela.fluor_100g = (tabela.fluor * 100) / peso
+      tabela.iodo_100g = (tabela.iodo * 100) / peso
+      tabela.molibdenio_100g = (tabela.molibdenio * 100) / peso
+      tabela.selenio_100g = (tabela.selenio * 100) / peso
+      tabela.colina_100g = (tabela.colina * 100) / peso
+      tabela.acucaresTotais_100g = (tabela.acucaresTotais * 100) / peso
+    else:
+      tabela.proteinas_100g = 0
+      tabela.gordTotais_100g = 0
+      tabela.carboidratos_100g = 0
+      tabela.fibras_100g = 0
+      tabela.energiakcal_100g = 0
+      tabela.energiaKJ_100g = 0
+      tabela.calcio_100g = 0
+      tabela.ferro_100g = 0
+      tabela.magnesio_100g = 0
+      tabela.fosforo_100g = 0
+      tabela.potassio_100g = 0
+      tabela.sodio_100g = 0
+      tabela.zinco_100g = 0
+      tabela.cobre_100g = 0
+      tabela.manganes_100g = 0
+      tabela.retinol_100g = 0
+      tabela.RE_100g = 0
+      tabela.vitaminaARAE_100g = 0
+      tabela.vitaminaC_100g = 0
+      tabela.tiamina_100g = 0
+      tabela.riboflavina_100g = 0
+      tabela.niancina_100g = 0
+      tabela.piridoxina_100g = 0
+      tabela.gordSat_100g = 0
+      tabela.gordTrans_100g = 0
+      tabela.gordPoli_100g = 0
+      tabela.gordMono_100g = 0
+      tabela.colesterol_100g = 0
+      tabela.acucaresadd_100g = 0
+      tabela.omega6_100g = 0
+      tabela.omega3_100g = 0
+      tabela.vitaminaD_100g = 0
+      tabela.vitaminaE_100g = 0
+      tabela.vitaminaK_100g = 0
+      tabela.biotina_100g = 0
+      tabela.acidoFolico_100g = 0
+      tabela.acidoPantotenico_100g = 0
+      tabela.vitaminaB12_100g = 0
+      tabela.cloreto_100g = 0
+      tabela.cromo_100g = 0
+      tabela.fluor_100g = 0
+      tabela.iodo_100g = 0
+      tabela.molibdenio_100g = 0
+      tabela.selenio_100g = 0
+      tabela.colina_100g = 0
+      tabela.acucaresTotais_100g = 0
 
     tabela.save()
   atualizaNutriente_100g(tabela, ficha)
@@ -293,258 +376,63 @@ def attTabela(tabela, itensDaReceita, ficha):
   atualizaNutriente_Porcao(tabela, ficha)
 
   def atualizaNutriente_Arred(tabela): # Atualiza o nutriente_Arred dinâmico (arredonda a quantidade por porção)
-    # Alguns nutrientes pode ser considerados "zero" ou "0" ou "não contém" se forem valores menores ou iguais a X expressa em g ou ml
-    def arredondaNutriente(condicaoParaZero, valor, ehVitaminaOuMineral):
+    # Helper to apply ANVISA rounding to both portion (Arred) and 100g columns
+    def arredonda_e_salva(nome_campo, cond_zero_porcao, cond_zero_100g):
+      val_porcao = getattr(tabela, f"{nome_campo}_Porcao")
+      val_100g = getattr(tabela, f"{nome_campo}_100g")
+      unidade = getattr(tabela, f"{nome_campo}_unidadeMd")
       
-      # Arredondada pra baxio quando na metade: Ex: 32,4 -> 32 ; 32,5 -> 32 ; 32,6 -> 33
-      def round_half_down(n, decimals=0):
-          multiplier = 10 ** decimals
-          return math.ceil(n*multiplier - 0.5) / multiplier
+      setattr(tabela, f"{nome_campo}_Arred", arredondaNutriente_ANVISA(cond_zero_porcao, val_porcao, unidade))
+      setattr(tabela, f"{nome_campo}_100g", arredondaNutriente_ANVISA(cond_zero_100g, val_100g, unidade))
 
-      if condicaoParaZero:
-        novoValor = 0
-      elif valor < 1 and ehVitaminaOuMineral: # Duas cifras decimais
-        novoValor = round_half_down(valor, decimals=2)
-      elif valor < 10: # Uma cifra decimal
-        novoValor = round_half_down(valor, decimals=1)
-      else: # Maiores que 10 são os números inteiros
-        novoValor = round_half_down(valor)
-
-      return novoValor
-
-    tabela.proteinas_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.proteinas_Porcao <= 0.5), # Menor ou igual a 0,5 g
-      valor = tabela.proteinas_Porcao,
-      ehVitaminaOuMineral = False)
-    
-    tabela.gordTotais_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.gordTotais_Porcao <= 0.5 and tabela.gordSat_Porcao <= 0.5 and tabela.gordTrans_Porcao <= 0.5 and tabela.gordMono_Porcao == 0 and tabela.gordPoli == 0), 
-      valor = tabela.gordTotais_Porcao,
-      ehVitaminaOuMineral = False)
-    
-    tabela.carboidratos_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.carboidratos_Porcao <= 0.5), # Menor ou igual a 0,5 g
-      valor = tabela.carboidratos_Porcao,
-      ehVitaminaOuMineral = False)
-
-    tabela.fibras_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.fibras_Porcao <= 0.5), # Menor ou igual a 0,5 g
-      valor = tabela.fibras_Porcao,
-      ehVitaminaOuMineral = False)
-    
-    tabela.energiakcal_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.energiakcal_Porcao <= 4), # Menor ou igual a 4 kcal
-      valor = tabela.energiakcal_Porcao,
-      ehVitaminaOuMineral = False)
-
-    tabela.energiakcal_100g = arredondaNutriente(
-      condicaoParaZero = (tabela.energiakcal_100g <= 4), # Menor ou igual a 4 kcal
-      valor = tabela.energiakcal_100g,
-      ehVitaminaOuMineral = False)
-
-    tabela.energiaKJ_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.energiaKJ_Porcao <= 17), # Menor ou igual a 17 kJ
-      valor = tabela.energiaKJ_Porcao,
-      ehVitaminaOuMineral = False)
-
-    tabela.calcio_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.calcio_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.ferro_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.ferro_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.magnesio_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.magnesio_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.fosforo_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.fosforo_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.potassio_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.potassio_Porcao,
-      ehVitaminaOuMineral = True)
-  
-    tabela.sodio_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.sodio_Porcao <= 5), # Menor ou igual a 5 mg
-      valor = tabela.sodio_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.zinco_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.zinco_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.cobre_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.cobre_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.manganes_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.manganes_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.retinol_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.retinol_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.RE_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.RE_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.vitaminaARAE_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.vitaminaARAE_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.vitaminaC_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.vitaminaC_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.tiamina_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.tiamina_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.riboflavina_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.riboflavina_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.niancina_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.niancina_Porcao,
-      ehVitaminaOuMineral = True)
-      
-    tabela.piridoxina_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.piridoxina_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.gordSat_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.gordSat_Porcao <= 0.2), # Menor ou igual a 0,2 g
-      valor = tabela.gordSat_Porcao,
-      ehVitaminaOuMineral = False)
-      
-    tabela.gordTrans_Arred = arredondaNutriente(
-      condicaoParaZero = (tabela.gordTrans_Porcao <= 0.2), # Menor ou igual a 0,2 g
-      valor = tabela.gordTrans_Porcao,
-      ehVitaminaOuMineral = False)
-
-    tabela.gordPoli_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.gordPoli_Porcao,
-      ehVitaminaOuMineral = False)
-      
-    tabela.gordMono_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.gordMono_Porcao,
-      ehVitaminaOuMineral = False)
-      
-    tabela.colesterol_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.colesterol_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.acucaresadd_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.acucaresadd_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.omega6_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.omega6_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.omega3_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.omega3_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.vitaminaD_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.vitaminaD_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.vitaminaE_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.vitaminaE_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.vitaminaK_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.vitaminaK_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.biotina_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.biotina_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.acidoFolico_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.acidoFolico_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.acidoPantotenico_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.acidoPantotenico_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.vitaminaB12_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.vitaminaB12_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.cloreto_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.cloreto_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.cromo_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.cromo_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.fluor_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.fluor_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.iodo_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.iodo_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.molibdenio_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.molibdenio_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.selenio_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.selenio_Porcao,
-      ehVitaminaOuMineral = True)
-
-    tabela.colina_Arred = arredondaNutriente(
-      condicaoParaZero = False,
-      valor = tabela.colina_Porcao,
-      ehVitaminaOuMineral = True)
-    tabela.acucaresTotais_Arred = arredondaNutriente(
-      condicaoParaZero = False, 
-      valor = tabela.acucaresTotais_Porcao,
-      ehVitaminaOuMineral = False)
+    arredonda_e_salva("proteinas", tabela.proteinas_Porcao <= 0.5, tabela.proteinas_100g <= 0.5)
+    arredonda_e_salva("gordTotais", 
+                      tabela.gordTotais_Porcao <= 0.5 and tabela.gordSat_Porcao <= 0.5 and tabela.gordTrans_Porcao <= 0.5 and tabela.gordMono_Porcao == 0 and tabela.gordPoli == 0,
+                      tabela.gordTotais_100g <= 0.5 and tabela.gordSat_100g <= 0.5 and tabela.gordTrans_100g <= 0.5 and tabela.gordMono_100g == 0 and tabela.gordPoli_100g == 0)
+    arredonda_e_salva("carboidratos", tabela.carboidratos_Porcao <= 0.5, tabela.carboidratos_100g <= 0.5)
+    arredonda_e_salva("fibras", tabela.fibras_Porcao <= 0.5, tabela.fibras_100g <= 0.5)
+    arredonda_e_salva("energiakcal", tabela.energiakcal_Porcao <= 4, tabela.energiakcal_100g <= 4)
+    arredonda_e_salva("energiaKJ", tabela.energiaKJ_Porcao <= 17, tabela.energiaKJ_100g <= 17)
+    arredonda_e_salva("calcio", False, False)
+    arredonda_e_salva("ferro", False, False)
+    arredonda_e_salva("magnesio", False, False)
+    arredonda_e_salva("fosforo", False, False)
+    arredonda_e_salva("potassio", False, False)
+    arredonda_e_salva("sodio", tabela.sodio_Porcao <= 5, tabela.sodio_100g <= 5)
+    arredonda_e_salva("zinco", False, False)
+    arredonda_e_salva("cobre", False, False)
+    arredonda_e_salva("manganes", False, False)
+    arredonda_e_salva("retinol", False, False)
+    arredonda_e_salva("RE", False, False)
+    arredonda_e_salva("vitaminaARAE", False, False)
+    arredonda_e_salva("vitaminaC", False, False)
+    arredonda_e_salva("tiamina", False, False)
+    arredonda_e_salva("riboflavina", False, False)
+    arredonda_e_salva("niancina", False, False)
+    arredonda_e_salva("piridoxina", False, False)
+    arredonda_e_salva("gordSat", tabela.gordSat_Porcao <= 0.2, tabela.gordSat_100g <= 0.2)
+    arredonda_e_salva("gordTrans", tabela.gordTrans_Porcao <= 0.2, tabela.gordTrans_100g <= 0.2)
+    arredonda_e_salva("gordPoli", False, False)
+    arredonda_e_salva("gordMono", False, False)
+    arredonda_e_salva("colesterol", False, False)
+    arredonda_e_salva("acucaresadd", False, False)
+    arredonda_e_salva("omega6", False, False)
+    arredonda_e_salva("omega3", False, False)
+    arredonda_e_salva("vitaminaD", False, False)
+    arredonda_e_salva("vitaminaE", False, False)
+    arredonda_e_salva("vitaminaK", False, False)
+    arredonda_e_salva("biotina", False, False)
+    arredonda_e_salva("acidoFolico", False, False)
+    arredonda_e_salva("acidoPantotenico", False, False)
+    arredonda_e_salva("vitaminaB12", False, False)
+    arredonda_e_salva("cloreto", False, False)
+    arredonda_e_salva("cromo", False, False)
+    arredonda_e_salva("fluor", False, False)
+    arredonda_e_salva("iodo", False, False)
+    arredonda_e_salva("molibdenio", False, False)
+    arredonda_e_salva("selenio", False, False)
+    arredonda_e_salva("colina", False, False)
+    arredonda_e_salva("acucaresTotais", False, False)
       
     tabela.save()
   atualizaNutriente_Arred(tabela)
