@@ -439,8 +439,8 @@ def attTabela(tabela, itensDaReceita, ficha):
 
   # Atualiza outros valores dinâmicos
   ficha.pesoLiquidoPreparacao = somaPesoLiquido
-  if ficha.pesoTotal and ficha.pesoAnvisa:
-    ficha.numPorcoes = int(ficha.pesoTotal / ficha.pesoAnvisa)
+  if ficha.pesoPorcao and ficha.pesoAnvisa:
+    ficha.numPorcoes = int(ficha.pesoPorcao / ficha.pesoAnvisa)
   else:
     ficha.numPorcoes = 0
   ficha.save()
@@ -757,20 +757,6 @@ def fichaX(request, pk):
   tabelaAtual = Tabela.objects.get(pk = pk)
   vd_trans = 0
 
-  # Converte um número decimal pro quarto (1/4) mais próximo, em número misto (ex: 8,49 -> "8 e 1/2")
-  def formatarFracaoMista(valor):
-    quartos = round(valor * 4)
-    inteiro, resto = divmod(quartos, 4)
-    if resto == 0:
-      return str(inteiro)
-
-    fracoesTexto = {1: "1/4", 2: "1/2", 3: "3/4"}
-    if inteiro == 0:
-      return fracoesTexto[resto]
-    return f"{inteiro} e {fracoesTexto[resto]}"
-
-  unidadesAnvisa = formatarFracaoMista((fichaAtual.pesoAnvisa or 0) / (fichaAtual.pesoPorcao or fichaAtual.pesoAnvisa or 1))
-
   # Lógica da lupa "alto em"
   nutrientes_altos = tabelaAtual.nutrientes_altos()
   alto_em_acucares = 'acucares' in nutrientes_altos
@@ -797,28 +783,23 @@ def fichaX(request, pk):
       lupa_img = None
 
   def tira_zero(VD):
-    if(VD == 0.0):
-      return 0
-    elif(VD >= 10):
-      VD = str(VD)
-      if(VD[-2:] == ',0'):
-        return VD[:-2]
-      VD = VD.replace('.0','')
+    if VD is None:
       return VD
-    else:
-      VD = str(VD)
-      VD = VD.replace('.',',')
-      return VD
+    # Depois do arredondamento ANVISA: se o valor virou inteiro, exibe sem casa
+    # decimal (sem o ",0"); caso contrário, usa vírgula como separador decimal.
+    if VD == int(VD):
+      return int(VD)
+    return str(VD).replace('.', ',')
 
   # Calcula e formata o número de porções por embalagem segundo as regras da ANVISA:
   # - número exato -> valor inteiro ("10 porções")
   # - quebrado e > 3 porções -> arredonda pro inteiro mais próximo, precedido de "Cerca de"
   # - quebrado e <= 3 porções -> arredonda pro quarto (1/4) mais próximo, em número misto ("1 e 1/2 porções")
-  def calcularNumPorcoes(pesoTotal, pesoAnvisa):
-    if not pesoTotal or not pesoAnvisa:
+  def calcularNumPorcoes(pesoPorcao, pesoAnvisa):
+    if not pesoPorcao or not pesoAnvisa:
       return "0 porções"
 
-    porcoes = pesoTotal / pesoAnvisa
+    porcoes = pesoPorcao / pesoAnvisa
 
     def pluralComContagem(valor):
       inteiro = round(valor)
@@ -849,7 +830,9 @@ def fichaX(request, pk):
       nutrientesFinais.append(["Carboidratos totais", tira_zero(tabela.carboidratos_Arred), tabela.carboidratos_VD, tabela.carboidratos_unidadeMd,round(tabela.carboidratos_100g,1)])
     
     if tabela.acucaresTotais_Mostrar:
-      vd_acucares_totais = "(**)"
+      # Açúcares totais não possui VDR definido (RDC 429/2020, art. 12, §1º):
+      # o %VD fica em branco, sem "0", "-" ou "(**)".
+      vd_acucares_totais = ""
       nutrientesFinais.append(["Açúcares totais", tira_zero(tabela.acucaresTotais_Arred), vd_acucares_totais, tabela.acucaresTotais_unidadeMd,round(tabela.acucaresTotais_100g,1)])
     
     if tabela.acucaresadd_Mostrar:
@@ -983,8 +966,14 @@ def fichaX(request, pk):
     nutrientesExtras = Nutriente.objects.filter(origemTabela = tabela)
     for nutrienteExtra in nutrientesExtras:
       nutrientesFinais.append([nutrienteExtra.nomeNutri, tira_zero(nutrienteExtra.qtde_Arred), nutrienteExtra.qtde_VD])
-    
-    
+
+    # Coluna "por 100 g": aplica a mesma limpeza da coluna por porção, para inteiros
+    # não aparecerem com ",0". Só as linhas com essa coluna têm índice 4 (as de
+    # nutrientes extras têm apenas 3 posições).
+    for linha in nutrientesFinais:
+      if len(linha) > 4:
+        linha[4] = tira_zero(linha[4])
+
     return nutrientesFinais
   nutrientesFront = montarTabelaFinal(tabela=tabelaAtual)
 
@@ -1009,12 +998,19 @@ def fichaX(request, pk):
   ordemIngredientesFront = ordenarIngredientesPorQuantidade(tabela=tabelaAtual)
 
   pesoAnvisaSemZero = tira_zero(int(fichaAtual.pesoAnvisa or fichaAtual.pesoPorcao))
-  numPorcoesExibicao = calcularNumPorcoes(fichaAtual.pesoTotal, fichaAtual.pesoAnvisa)
+  numPorcoesExibicao = calcularNumPorcoes(fichaAtual.pesoPorcao, fichaAtual.pesoAnvisa)
+
+  # Cabeçalho "Número de porções": pesoPorcao (cliente) / pesoAnvisa, mesma regra da Task 5.3.
+  # Recalculado na exibição para não mostrar o valor persistido desatualizado (ex.: fichas
+  # importadas do backup, gravadas com a fórmula antiga pesoTotal/pesoAnvisa).
+  if fichaAtual.pesoPorcao and fichaAtual.pesoAnvisa:
+    fichaAtual.numPorcoes = int(fichaAtual.pesoPorcao / fichaAtual.pesoAnvisa)
+  else:
+    fichaAtual.numPorcoes = 0
   identados = ["Açúcares totais", "Açúcares adicionados", "Gorduras Saturadas", "Gorduras Trans", "Gorduras monosaturadas", "Gorduras polissaturadas", "Colesterol"]
   
   return render(request, 'fichax.html', {
     'fichaAtual': fichaAtual,
-    'unidadesAnvisa': unidadesAnvisa,
     'pesoAnvisaSemZero': pesoAnvisaSemZero,
     'numPorcoesExibicao': numPorcoesExibicao,
     'tabelaAtual': tabelaAtual,

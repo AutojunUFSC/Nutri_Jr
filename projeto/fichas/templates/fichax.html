@@ -61,7 +61,7 @@
           <hr class="linha-cabeca1">
           <div id="esquerda">
             Porções por embalagem: {{ numPorcoesExibicao }} <br>
-            Porção: {{ pesoAnvisaSemZero }}g ({{unidadesAnvisa}} {{ fichaAtual.medCaseiraPorcao }})
+            Porção: {{ pesoAnvisaSemZero }}g ({{ fichaAtual.medCaseiraPorcao }})
           </div>
           <hr class="linha-cabeca2">
         </td>
@@ -91,8 +91,7 @@
 
       <tr>
         <td colspan="4" style="text-align: left; font-size: 8px;">
-          *Percentual de valores diários fornecidos pela porção. <br>
-          ** Valor diário não estabelecido.
+          *Percentual de valores diários fornecidos pela porção.
         </td>
       </tr>
     </table>
@@ -121,7 +120,7 @@
           <b><strong style="font-size: 13px;">INFORMAÇÃO NUTRICIONAL</strong></b><br>
           <hr class="linha-cabeca1">
           Porções por embalagem: {{ numPorcoesExibicao }} <b>•</b>
-          Porção: {{ pesoAnvisaSemZero }}g ({{ unidadesAnvisa }} {{ fichaAtual.medCaseiraPorcao }})
+          Porção: {{ pesoAnvisaSemZero }}g ({{ fichaAtual.medCaseiraPorcao }})
           <hr class="linha-cabeca2">
         </div>
       </td>
@@ -141,8 +140,8 @@
               {% elif not forloop.last %}, <b style="font-size:10.5px;">•</b>{% else %}.{% endif %}
             {% else %}
               {{ nutrienteFinal.0 }} 
-              <span style="white-space:nowrap; font-size: 10.5px;">{{ nutrienteFinal.4 }}{{ nutrienteFinal.3 }}</span> 
-              (<b style="font-size:10.5px;">{{ nutrienteFinal.1 }}{{ nutrienteFinal.3 }}</b>, {{ nutrienteFinal.2 }}%)
+              <span style="white-space:nowrap; font-size: 10.5px;">{{ nutrienteFinal.4 }}{{ nutrienteFinal.3 }}</span>
+              (<b style="font-size:10.5px;">{{ nutrienteFinal.1 }}{{ nutrienteFinal.3 }}</b>{% if nutrienteFinal.2 != "" %}, {{ nutrienteFinal.2 }}%{% endif %})
             {% endif %}
           {% endfor %}
         </p>
@@ -150,8 +149,7 @@
     </tr>
     <tr>
       <td colspan="4" style="text-align:left; font-size:10.5px;">
-        *Percentual de valores diários fornecidos pela porção.<br>
-        ** Valor diário não estabelecido.
+        *Percentual de valores diários fornecidos pela porção.
       </td>
     </tr>
   </table>
