@@ -1,2 +1,17 @@
 .venv/
+.venv
 .claude/
+
+# Migrado de projeto/.gitignore ao mover o projeto para a raiz
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+venv/
+Scripts/
+Include/
+Lib/
+pyvenv.cfg
+*.dump
