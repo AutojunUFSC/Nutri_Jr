@@ -551,7 +551,8 @@ def fichaX(request, pk):
     return textoOrdenado.capitalize()
   ordemIngredientesFront = ordenarIngredientesPorQuantidade(tabela=tabelaAtual)
 
-  pesoAnvisaSemZero = tira_zero(int(fichaAtual.pesoAnvisa or fichaAtual.pesoPorcao))
+  # `or 0` protege contra ficha antiga sem nenhum peso de porção preenchido (existe em dados reais)
+  pesoAnvisaSemZero = tira_zero(int(fichaAtual.pesoAnvisa or fichaAtual.pesoPorcao or 0))
   numPorcoesExibicao = calcularNumPorcoes(fichaAtual.pesoPorcao, fichaAtual.pesoAnvisa)
 
   # Cabeçalho "Número de porções": pesoPorcao (cliente) / pesoAnvisa, mesma regra da Task 5.3.

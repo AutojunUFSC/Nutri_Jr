@@ -92,50 +92,52 @@ def attTabela(tabela, itensDaReceita, ficha):
 
   def adicionaValoresComBaseNaReceita(tabela, itensDaReceita): # Faz a soma do valor energético e nutrientes de todos os itens da receita e coloca na tabela
     for itemReceita in itensDaReceita:
-      tabela.proteinas += (itemReceita.ingrediente.proteinas_100g / 100) * itemReceita.pesoLiquido
-      tabela.gordTotais += (itemReceita.ingrediente.gordTotais_100g / 100) * itemReceita.pesoLiquido
-      tabela.carboidratos += (itemReceita.ingrediente.carboidratos_100g / 100) * itemReceita.pesoLiquido
-      tabela.fibras += (itemReceita.ingrediente.fibras_100g / 100) * itemReceita.pesoLiquido
-      tabela.calcio += (itemReceita.ingrediente.calcio_100g / 100) * itemReceita.pesoLiquido
-      tabela.ferro += (itemReceita.ingrediente.ferro_100g / 100) * itemReceita.pesoLiquido
-      tabela.magnesio += (itemReceita.ingrediente.magnesio_100g / 100) * itemReceita.pesoLiquido
-      tabela.fosforo += (itemReceita.ingrediente.fosforo_100g / 100) * itemReceita.pesoLiquido
-      tabela.potassio += (itemReceita.ingrediente.potassio_100g / 100) * itemReceita.pesoLiquido
-      tabela.sodio += (itemReceita.ingrediente.sodio_100g / 100) * itemReceita.pesoLiquido
-      tabela.zinco += (itemReceita.ingrediente.zinco_100g / 100) * itemReceita.pesoLiquido
-      tabela.cobre += (itemReceita.ingrediente.cobre_100g / 100) * itemReceita.pesoLiquido
-      tabela.manganes += (itemReceita.ingrediente.manganes_100g / 100) * itemReceita.pesoLiquido
-      tabela.retinol += (itemReceita.ingrediente.retinol_100g / 100) * itemReceita.pesoLiquido
-      tabela.RE += (itemReceita.ingrediente.RE_100g / 100) * itemReceita.pesoLiquido
-      tabela.vitaminaARAE += (itemReceita.ingrediente.vitaminaARAE_100g / 100) * itemReceita.pesoLiquido
-      tabela.vitaminaC += (itemReceita.ingrediente.vitaminaC_100g / 100) * itemReceita.pesoLiquido
-      tabela.tiamina += (itemReceita.ingrediente.tiamina_100g / 100) * itemReceita.pesoLiquido
-      tabela.riboflavina += (itemReceita.ingrediente.riboflavina_100g / 100) * itemReceita.pesoLiquido
-      tabela.niancina += (itemReceita.ingrediente.niancina_100g / 100) * itemReceita.pesoLiquido
-      tabela.piridoxina += (itemReceita.ingrediente.piridoxina_100g / 100) * itemReceita.pesoLiquido
-      tabela.gordSat += (itemReceita.ingrediente.gordSat_100g / 100) * itemReceita.pesoLiquido
-      tabela.gordTrans += (itemReceita.ingrediente.gordTrans_100g / 100) * itemReceita.pesoLiquido
-      tabela.gordPoli += (itemReceita.ingrediente.gordPoli_100g / 100) * itemReceita.pesoLiquido
-      tabela.gordMono += (itemReceita.ingrediente.gordMono_100g / 100) * itemReceita.pesoLiquido
-      tabela.colesterol += (itemReceita.ingrediente.colesterol_100g / 100) * itemReceita.pesoLiquido
-      tabela.acucaresadd += (itemReceita.ingrediente.acucaresadd_100g / 100) * itemReceita.pesoLiquido
-      tabela.omega6 += (itemReceita.ingrediente.omega6_100g / 100) * itemReceita.pesoLiquido
-      tabela.omega3 += (itemReceita.ingrediente.omega3_100g / 100) * itemReceita.pesoLiquido
-      tabela.vitaminaD += (itemReceita.ingrediente.vitaminaD_100g / 100) * itemReceita.pesoLiquido
-      tabela.vitaminaE += (itemReceita.ingrediente.vitaminaE_100g / 100) * itemReceita.pesoLiquido
-      tabela.vitaminaK += (itemReceita.ingrediente.vitaminaK_100g / 100) * itemReceita.pesoLiquido
-      tabela.biotina += (itemReceita.ingrediente.biotina_100g / 100) * itemReceita.pesoLiquido
-      tabela.acidoFolico += (itemReceita.ingrediente.acidoFolico_100g / 100) * itemReceita.pesoLiquido
-      tabela.acidoPantotenico += (itemReceita.ingrediente.acidoPantotenico_100g / 100) * itemReceita.pesoLiquido
-      tabela.vitaminaB12 += (itemReceita.ingrediente.vitaminaB12_100g / 100) * itemReceita.pesoLiquido
-      tabela.cloreto += (itemReceita.ingrediente.cloreto_100g / 100) * itemReceita.pesoLiquido
-      tabela.cromo += (itemReceita.ingrediente.cromo_100g / 100) * itemReceita.pesoLiquido
-      tabela.fluor += (itemReceita.ingrediente.fluor_100g / 100) * itemReceita.pesoLiquido
-      tabela.iodo += (itemReceita.ingrediente.iodo_100g / 100) * itemReceita.pesoLiquido
-      tabela.molibdenio += (itemReceita.ingrediente.molibdenio_100g / 100) * itemReceita.pesoLiquido
-      tabela.selenio += (itemReceita.ingrediente.selenio_100g / 100) * itemReceita.pesoLiquido
-      tabela.colina += (itemReceita.ingrediente.colina_100g / 100) * itemReceita.pesoLiquido
-      tabela.acucaresTotais += (itemReceita.ingrediente.acucaresTotais_100g / 100) * itemReceita.pesoLiquido
+      # `or 0` protege contra item de receita antigo com pesoLiquido nulo (existe em dados reais)
+      pesoLiquido = itemReceita.pesoLiquido or 0
+      tabela.proteinas += (itemReceita.ingrediente.proteinas_100g / 100) * pesoLiquido
+      tabela.gordTotais += (itemReceita.ingrediente.gordTotais_100g / 100) * pesoLiquido
+      tabela.carboidratos += (itemReceita.ingrediente.carboidratos_100g / 100) * pesoLiquido
+      tabela.fibras += (itemReceita.ingrediente.fibras_100g / 100) * pesoLiquido
+      tabela.calcio += (itemReceita.ingrediente.calcio_100g / 100) * pesoLiquido
+      tabela.ferro += (itemReceita.ingrediente.ferro_100g / 100) * pesoLiquido
+      tabela.magnesio += (itemReceita.ingrediente.magnesio_100g / 100) * pesoLiquido
+      tabela.fosforo += (itemReceita.ingrediente.fosforo_100g / 100) * pesoLiquido
+      tabela.potassio += (itemReceita.ingrediente.potassio_100g / 100) * pesoLiquido
+      tabela.sodio += (itemReceita.ingrediente.sodio_100g / 100) * pesoLiquido
+      tabela.zinco += (itemReceita.ingrediente.zinco_100g / 100) * pesoLiquido
+      tabela.cobre += (itemReceita.ingrediente.cobre_100g / 100) * pesoLiquido
+      tabela.manganes += (itemReceita.ingrediente.manganes_100g / 100) * pesoLiquido
+      tabela.retinol += (itemReceita.ingrediente.retinol_100g / 100) * pesoLiquido
+      tabela.RE += (itemReceita.ingrediente.RE_100g / 100) * pesoLiquido
+      tabela.vitaminaARAE += (itemReceita.ingrediente.vitaminaARAE_100g / 100) * pesoLiquido
+      tabela.vitaminaC += (itemReceita.ingrediente.vitaminaC_100g / 100) * pesoLiquido
+      tabela.tiamina += (itemReceita.ingrediente.tiamina_100g / 100) * pesoLiquido
+      tabela.riboflavina += (itemReceita.ingrediente.riboflavina_100g / 100) * pesoLiquido
+      tabela.niancina += (itemReceita.ingrediente.niancina_100g / 100) * pesoLiquido
+      tabela.piridoxina += (itemReceita.ingrediente.piridoxina_100g / 100) * pesoLiquido
+      tabela.gordSat += (itemReceita.ingrediente.gordSat_100g / 100) * pesoLiquido
+      tabela.gordTrans += (itemReceita.ingrediente.gordTrans_100g / 100) * pesoLiquido
+      tabela.gordPoli += (itemReceita.ingrediente.gordPoli_100g / 100) * pesoLiquido
+      tabela.gordMono += (itemReceita.ingrediente.gordMono_100g / 100) * pesoLiquido
+      tabela.colesterol += (itemReceita.ingrediente.colesterol_100g / 100) * pesoLiquido
+      tabela.acucaresadd += (itemReceita.ingrediente.acucaresadd_100g / 100) * pesoLiquido
+      tabela.omega6 += (itemReceita.ingrediente.omega6_100g / 100) * pesoLiquido
+      tabela.omega3 += (itemReceita.ingrediente.omega3_100g / 100) * pesoLiquido
+      tabela.vitaminaD += (itemReceita.ingrediente.vitaminaD_100g / 100) * pesoLiquido
+      tabela.vitaminaE += (itemReceita.ingrediente.vitaminaE_100g / 100) * pesoLiquido
+      tabela.vitaminaK += (itemReceita.ingrediente.vitaminaK_100g / 100) * pesoLiquido
+      tabela.biotina += (itemReceita.ingrediente.biotina_100g / 100) * pesoLiquido
+      tabela.acidoFolico += (itemReceita.ingrediente.acidoFolico_100g / 100) * pesoLiquido
+      tabela.acidoPantotenico += (itemReceita.ingrediente.acidoPantotenico_100g / 100) * pesoLiquido
+      tabela.vitaminaB12 += (itemReceita.ingrediente.vitaminaB12_100g / 100) * pesoLiquido
+      tabela.cloreto += (itemReceita.ingrediente.cloreto_100g / 100) * pesoLiquido
+      tabela.cromo += (itemReceita.ingrediente.cromo_100g / 100) * pesoLiquido
+      tabela.fluor += (itemReceita.ingrediente.fluor_100g / 100) * pesoLiquido
+      tabela.iodo += (itemReceita.ingrediente.iodo_100g / 100) * pesoLiquido
+      tabela.molibdenio += (itemReceita.ingrediente.molibdenio_100g / 100) * pesoLiquido
+      tabela.selenio += (itemReceita.ingrediente.selenio_100g / 100) * pesoLiquido
+      tabela.colina += (itemReceita.ingrediente.colina_100g / 100) * pesoLiquido
+      tabela.acucaresTotais += (itemReceita.ingrediente.acucaresTotais_100g / 100) * pesoLiquido
 
     tabela.save()
   adicionaValoresComBaseNaReceita(tabela, itensDaReceita)
@@ -149,7 +151,7 @@ def attTabela(tabela, itensDaReceita, ficha):
   def somaPesoLiquidoDaReceita(itensDaReceita): # Faz a soma do Peso liquido da receita
     soma = 0
     for itemReceita in itensDaReceita:
-      soma += itemReceita.pesoLiquido
+      soma += itemReceita.pesoLiquido or 0
     return soma
   somaPesoLiquido = somaPesoLiquidoDaReceita(itensDaReceita)
 
@@ -254,7 +256,10 @@ def attTabela(tabela, itensDaReceita, ficha):
   atualizaNutriente_100g(tabela, ficha)
 
   def atualizaNutriente_Porcao(tabela, ficha): # Atualiza o nutriente_Porcao, valor dinâmico que muda quando o nutriente_100g muda
-    peso_por_porção = ficha.pesoAnvisa or ficha.pesoPorcao
+    # `or 0` protege contra ficha com pesoAnvisa e pesoPorcao nulos/zerados (existe em
+    # dados reais antigos, ex.: fichas sem nenhum peso de porção preenchido) - sem isso
+    # peso_por_porção vira None e quebra a conta abaixo.
+    peso_por_porção = ficha.pesoAnvisa or ficha.pesoPorcao or 0
     tabela.proteinas_Porcao = (tabela.proteinas_100g / 100) * peso_por_porção
     tabela.gordTotais_Porcao = (tabela.gordTotais_100g / 100) * peso_por_porção
     tabela.carboidratos_Porcao = (tabela.carboidratos_100g / 100) * peso_por_porção

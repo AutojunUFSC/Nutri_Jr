@@ -28,6 +28,7 @@ class Command(BaseCommand):
 
         total = 0
         ignoradas = 0
+        falhas = []
         for ficha in fichas:
             try:
                 tabela = Tabela.objects.get(pk=ficha.pk)
@@ -35,11 +36,20 @@ class Command(BaseCommand):
                 ignoradas += 1
                 continue
 
-            itensReceita = Ficha_Ingrediente.objects.filter(ficha=ficha)
-            attTabela(tabela, itensReceita, ficha)
-            total += 1
-            self.stdout.write(f"  Ficha {ficha.pk} ({ficha.nomeFicha}): recalculada")
+            # Não imprime nome/dado da ficha aqui: em bases reais grandes gera muito
+            # ruído e algumas fichas têm caracteres que quebram a codificação do
+            # console do Windows. E não deixa uma ficha com erro (ex.: dado antigo
+            # incompleto) interromper o recálculo das demais.
+            try:
+                itensReceita = Ficha_Ingrediente.objects.filter(ficha=ficha)
+                attTabela(tabela, itensReceita, ficha)
+                total += 1
+            except Exception as e:
+                falhas.append((ficha.pk, str(e)))
 
         self.stdout.write(self.style.SUCCESS(
-            f"Concluído: {total} ficha(s) recalculada(s), {ignoradas} sem Tabela (ignorada(s))."
+            f"Concluído: {total} ficha(s) recalculada(s), {ignoradas} sem Tabela (ignorada(s)), "
+            f"{len(falhas)} com erro."
         ))
+        for pk, erro in falhas:
+            self.stdout.write(self.style.ERROR(f"  Ficha {pk}: {erro}"))

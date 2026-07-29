@@ -21,6 +21,9 @@ class FichaFormBase(forms.ModelForm):
     labels = {'autor': _('Autor:'), 'nomeFicha': _('Nome da receita:'), 'cliente': _('Cliente:'),
               'pesoTotal': _('Peso total:'),'pesoPorcao': _('Peso da porção (Cliente):'),'pesoAnvisa': _('Peso da porção (Anvisa):'),'dataCriacao': _('Data de criação:'),
               'medCaseiraPorcao': _('Medida caseira da porção:')}
+    help_texts = {
+      'medCaseiraPorcao': _('Inclua a quantidade, não só a unidade. Ex.: "2 colheres de sopa", "1/2 xícara" — não "colheres de sopa".'),
+    }
 
   def __init__(self, *args, **kwargs):
     super(FichaFormBase, self).__init__(*args, **kwargs)
