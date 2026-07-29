@@ -191,6 +191,7 @@ class Ficha(models.Model):
   pesoAnvisa = models.FloatField(null=True, blank=True, default=0)
   numPorcoes = models.IntegerField(null=True, blank=True, default=0)  # Deve arredondar sempre pra baixo. Já que é um Integer ele só pega a parte inteira automaticamente
   medCaseiraPorcao = models.CharField(max_length=120, blank=True, default="medida caseira")
+  quantidadeMedCaseiraPorcao = models.FloatField(null=True, blank=True, default=0)  # Combinado com medCaseiraPorcao no rótulo. Ex: 3 (em "3 colheres de chá")
 
   # Visualização:
   def __str__(self):

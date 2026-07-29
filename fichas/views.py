@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
+from .templatetags.fracao_filters import fracao
 import csv, io
 
 from django.contrib import messages
@@ -556,6 +557,13 @@ def fichaX(request, pk):
   pesoAnvisaSemZero = tira_zero(int(fichaAtual.pesoAnvisa or fichaAtual.pesoPorcao or 0))
   numPorcoesExibicao = calcularNumPorcoes(fichaAtual.pesoPorcao, fichaAtual.pesoAnvisa)
 
+  # Junta a quantidade com o nome da medida caseira da porção pro rótulo, ex.: "3" + "colheres
+  # de chá" -> "3 colheres de chá". Sem quantidade preenchida, mostra só o nome (fichas antigas).
+  medidaCaseiraDaPorcao = fichaAtual.medCaseiraPorcao or ''
+  if fichaAtual.quantidadeMedCaseiraPorcao:
+    medidaCaseiraDaPorcao = f"{tira_zero(fichaAtual.quantidadeMedCaseiraPorcao)} {medidaCaseiraDaPorcao}".strip()
+  medidaCaseiraDaPorcao = fracao(medidaCaseiraDaPorcao)
+
   # Cabeçalho "Número de porções": pesoPorcao (cliente) / pesoAnvisa, mesma regra da Task 5.3.
   # Recalculado na exibição para não mostrar o valor persistido desatualizado (ex.: fichas
   # importadas do backup, gravadas com a fórmula antiga pesoTotal/pesoAnvisa).
@@ -569,6 +577,7 @@ def fichaX(request, pk):
     'fichaAtual': fichaAtual,
     'pesoAnvisaSemZero': pesoAnvisaSemZero,
     'numPorcoesExibicao': numPorcoesExibicao,
+    'medidaCaseiraDaPorcao': medidaCaseiraDaPorcao,
     'tabelaAtual': tabelaAtual,
     'nutrientesFinais': nutrientesFront, 
     'nutrientesFinais1': nutrientesFront1, 

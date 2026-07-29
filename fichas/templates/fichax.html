@@ -1,6 +1,5 @@
 {% extends 'base_layout.html' %}
 {% load static %}
-{% load fracao_filters %}
 {% block principal %}
 <title>Ficha</title>
 <link rel="stylesheet" type="text/css" href="{% static '/fichas/fichax.css' %}">
@@ -62,7 +61,7 @@
           <hr class="linha-cabeca1">
           <div id="esquerda">
             Porções por embalagem: {{ numPorcoesExibicao }} <br>
-            Porção: {{ pesoAnvisaSemZero }}g ({{ fichaAtual.medCaseiraPorcao|fracao }})
+            Porção: {{ pesoAnvisaSemZero }}g ({{ medidaCaseiraDaPorcao }})
           </div>
           <hr class="linha-cabeca2">
         </td>
@@ -121,7 +120,7 @@
           <b><strong style="font-size: 13px;">INFORMAÇÃO NUTRICIONAL</strong></b><br>
           <hr class="linha-cabeca1">
           Porções por embalagem: {{ numPorcoesExibicao }} <b>•</b>
-          Porção: {{ pesoAnvisaSemZero }}g ({{ fichaAtual.medCaseiraPorcao|fracao }})
+          Porção: {{ pesoAnvisaSemZero }}g ({{ medidaCaseiraDaPorcao }})
           <hr class="linha-cabeca2">
         </div>
       </td>

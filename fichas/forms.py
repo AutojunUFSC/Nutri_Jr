@@ -17,10 +17,11 @@ class FichaFormBase(forms.ModelForm):
 
   class Meta:
     model = Ficha
-    fields = ['autor', 'nomeFicha', 'cliente', 'pesoTotal', 'pesoPorcao', 'pesoAnvisa', 'dataCriacao', 'medCaseiraPorcao']
+    fields = ['autor', 'nomeFicha', 'cliente', 'pesoTotal', 'pesoPorcao', 'pesoAnvisa', 'dataCriacao', 'medCaseiraPorcao', 'quantidadeMedCaseiraPorcao']
     labels = {'autor': _('Autor:'), 'nomeFicha': _('Nome da receita:'), 'cliente': _('Cliente:'),
               'pesoTotal': _('Peso total:'),'pesoPorcao': _('Peso da porção (Cliente):'),'pesoAnvisa': _('Peso da porção (Anvisa):'),'dataCriacao': _('Data de criação:'),
-              'medCaseiraPorcao': _('Medida caseira da porção:')}
+              'medCaseiraPorcao': _('Medida caseira da porção:'),
+              'quantidadeMedCaseiraPorcao': _('Quantidade da medida caseira:')}
 
   def __init__(self, *args, **kwargs):
     super(FichaFormBase, self).__init__(*args, **kwargs)
