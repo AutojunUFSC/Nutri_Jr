@@ -43,6 +43,11 @@
                 <input class="form-control" type="text"    id="medidaCaseira" name="medidaCaseira" value="{{ item.medidaCaseira }}">
                 <br>
             {% endif %}
+            {% if item.quantidadeMedidaCaseira != None %}
+                <label class="control-label">Quantidade:</label>
+                <input class="form-control" type="number"    id="quantidadeMedidaCaseira" name="quantidadeMedidaCaseira" value="{{ item.quantidadeMedidaCaseira }}">
+                <br>
+            {% endif %}
                     
             <button class="btn btn-outline-secondary btn-lg" type="submit">Atualizar</button><br><br>
         </div>

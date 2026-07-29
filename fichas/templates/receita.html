@@ -51,7 +51,8 @@
 				<th style="width:17%;">Nome Fantasia</th>
 				<th style="width:16%;">Peso Bruto</th>
 				<th style="width:16%;">Peso Líquido</th>
-				<th style="width:17%;">Medida Caseira</th>
+				<th style="width:13%;">Medida Caseira</th>
+				<th style="width:9%;">Quantidade</th>
 				<th style="width:8%;">Editar</th>
 				<th style="width:5%;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></th>
 			</tr>
@@ -63,7 +64,8 @@
 				<td class="filterable-cell" style="width:17%;">{{ itemReceita.nomeFantasia }}</td>
 				<td class="filterable-cell" style="width:16%;">{{ itemReceita.pesoBruto }}</td>
 				<td class="filterable-cell" style="width:16%;">{{ itemReceita.pesoLiquido }}{{ itemReceita.unidade }}</td>
-				<td class="filterable-cell" style="width:17%;">{{ itemReceita.medidaCaseira }}</td>
+				<td class="filterable-cell" style="width:13%;">{{ itemReceita.medidaCaseira }}</td>
+				<td class="filterable-cell" style="width:9%;">{{ itemReceita.quantidadeMedidaCaseira }}</td>
 				<td class="filterable-cell" style="width:8%;"><a href="{% url 'editarItemReceita' fichaAtual.pk itemReceita.id %}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
 				<td class="filterable-cell" style="width:5%;"><a href="{% url 'deletarItemReceita' fichaAtual.pk itemReceita.id %}">X</a></td>
 			</tr>
@@ -98,7 +100,8 @@
 			{{ formReceita.nomeFantasia|bootstrap }}
 			{{ formReceita.pesoBruto|bootstrap }} *Em gramas
 			{{ formReceita.pesoLiquido|bootstrap }}
-      		{{ formReceita.medidaCaseira|bootstrap }}	
+      		{{ formReceita.medidaCaseira|bootstrap }}
+      		{{ formReceita.quantidadeMedidaCaseira|bootstrap }}
 			<button class="btn btn-outline-secondary btn-lg" type="submit">Adicionar</button><br><br>
 		</div>
 	</div>

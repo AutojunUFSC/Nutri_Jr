@@ -155,6 +155,7 @@ def salvarReceita(request):
     ficha_ingrediente.pesoBruto = request.POST['pesoBruto']
     ficha_ingrediente.pesoLiquido = request.POST['pesoLiquido']
     ficha_ingrediente.medidaCaseira = request.POST['medidaCaseira']
+    ficha_ingrediente.quantidadeMedidaCaseira = request.POST['quantidadeMedidaCaseira'] or None
 
     ficha_ingrediente.save()
 
