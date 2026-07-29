@@ -38,13 +38,26 @@ def arredondaNutriente_ANVISA(condicaoParaZero, valor, unidade):
         else:
             return round_half_down(valor, 2)
 
+# Frações "redondas" usadas no número de porções - de propósito só meios/terços/quartos
+# (sem oitavos/sextos/quintos), pra ficar simples de ler. Não inclui 0: qualquer razão
+# positiva, por menor que seja, cai na fração mais próxima da lista (nunca em "0 porções").
+_FRACOES_SIMPLES_PORCOES = [
+  (1 / 4, "1/4"),
+  (1 / 3, "1/3"),
+  (1 / 2, "1/2"),
+  (2 / 3, "2/3"),
+  (3 / 4, "3/4"),
+]
+
+def _fracaoSimplesMaisProxima(valor):
+  return min(_FRACOES_SIMPLES_PORCOES, key=lambda par: abs(par[0] - valor))[1]
+
 # Calcula e formata o número de porções (pesoPorcao do cliente / pesoAnvisa, Task 5.3) segundo
 # as regras da ANVISA (conferidas contra o commit de referência da Ceanut, ffbc3c5):
 # - número exato -> valor inteiro ("10 porções")
 # - quebrado e > 3 porções -> TRUNCA pro inteiro (3,6 -> 3), precedido de "Cerca de"
-# - quebrado e <= 3 porções -> arredonda pro oitavo mais próximo, em número misto ("1 e 1/2 porções")
-# Oitavos (não só quartos) pra não colapsar em "0 porções" quando a porção do cliente é bem
-# menor que a porção Anvisa mas ainda maior que zero (ex.: 35/300 = 0,117 -> "1/8 porção").
+# - quebrado e <= 3 porções -> arredonda pra fração simples mais próxima (1/4, 1/3, 1/2, 2/3
+#   ou 3/4), em número misto ("1 e 2/3 porções")
 def calcularNumPorcoes(pesoPorcao, pesoAnvisa):
   if not pesoPorcao or not pesoAnvisa:
     return "0 porções"
@@ -61,14 +74,11 @@ def calcularNumPorcoes(pesoPorcao, pesoAnvisa):
     # Regra Ceanut: quebrado e >3 porções trunca pro inteiro, não arredonda (3,6 -> 3).
     return f"Cerca de {formatoPlural(int(porcoes))}"
 
-  oitavos = round(porcoes * 8)
-  inteiro, resto = divmod(oitavos, 8)
-  fracoesTexto = {1: "1/8", 2: "1/4", 3: "3/8", 4: "1/2", 5: "5/8", 6: "3/4", 7: "7/8"}
-  if resto == 0:
-    return formatoPlural(inteiro)
+  inteiro = int(porcoes)
+  fracaoTexto = _fracaoSimplesMaisProxima(porcoes - inteiro)
   if inteiro == 0:
-    return f"{fracoesTexto[resto]} porção"
-  return f"{inteiro} e {fracoesTexto[resto]} porções"
+    return f"{fracaoTexto} porção"
+  return f"{inteiro} e {fracaoTexto} porções"
 
 # Função utilizada pelas views (e pelos signals) que atualiza a tabela. Necessario qdo há troca de valores em outras tabelas.
 def attTabela(tabela, itensDaReceita, ficha):
