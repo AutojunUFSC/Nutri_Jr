@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import *
 from .templatetags.fracao_filters import fracao
+from .calculos import calcularNumPorcoes
 import csv, io
 
 from django.contrib import messages
@@ -128,7 +129,8 @@ def editarFichaReceita(request, pk = None):
     'itensReceita': itensReceita,
     'tabelaNutricional': tabelaNutricional,
     'nutrientesExtras': nutrientesExtras,
-    'ingredientes': ingredientes
+    'ingredientes': ingredientes,
+    'numPorcoesExibicao': calcularNumPorcoes(fichaAtual.pesoPorcao, fichaAtual.pesoAnvisa),
     })
 
 # Ativada pela URL 'deletarItemReceita'. Tira um item da receita quando aperta no 'X'
@@ -345,35 +347,6 @@ def fichaX(request, pk):
     if VD == int(VD):
       return int(VD)
     return str(VD).replace('.', ',')
-
-  # Calcula e formata o número de porções por embalagem segundo as regras da ANVISA:
-  # - número exato -> valor inteiro ("10 porções")
-  # - quebrado e > 3 porções -> arredonda pro inteiro mais próximo, precedido de "Cerca de"
-  # - quebrado e <= 3 porções -> arredonda pro quarto (1/4) mais próximo, em número misto ("1 e 1/2 porções")
-  def calcularNumPorcoes(pesoPorcao, pesoAnvisa):
-    if not pesoPorcao or not pesoAnvisa:
-      return "0 porções"
-
-    porcoes = pesoPorcao / pesoAnvisa
-
-    def pluralComContagem(valor):
-      inteiro = round(valor)
-      return f"{inteiro} {'porção' if inteiro == 1 else 'porções'}"
-
-    if abs(porcoes - round(porcoes)) < 0.001:
-      return pluralComContagem(porcoes)
-
-    if porcoes > 3:
-      return f"Cerca de {pluralComContagem(porcoes)}"
-
-    quartos = round(porcoes * 4)
-    inteiro, resto = divmod(quartos, 4)
-    fracoesTexto = {1: "1/4", 2: "1/2", 3: "3/4"}
-    if resto == 0:
-      return pluralComContagem(inteiro)
-    if inteiro == 0:
-      return f"{fracoesTexto[resto]} porção"
-    return f"{inteiro} e {fracoesTexto[resto]} porções"
 
   # Faz uma lista com a linhas que serão futuramente mostradas no front
   def montarTabelaFinal(tabela):

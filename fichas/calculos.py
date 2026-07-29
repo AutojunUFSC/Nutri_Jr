@@ -38,6 +38,38 @@ def arredondaNutriente_ANVISA(condicaoParaZero, valor, unidade):
         else:
             return round_half_down(valor, 2)
 
+# Calcula e formata o número de porções (pesoPorcao do cliente / pesoAnvisa, Task 5.3) segundo
+# as regras da ANVISA:
+# - número exato -> valor inteiro ("10 porções")
+# - quebrado e > 3 porções -> arredonda pro inteiro mais próximo, precedido de "Cerca de"
+# - quebrado e <= 3 porções -> arredonda pro oitavo mais próximo, em número misto ("1 e 1/2 porções")
+# Oitavos (não só quartos) pra não colapsar em "0 porções" quando a porção do cliente é bem
+# menor que a porção Anvisa mas ainda maior que zero (ex.: 35/300 = 0,117 -> "1/8 porção").
+def calcularNumPorcoes(pesoPorcao, pesoAnvisa):
+  if not pesoPorcao or not pesoAnvisa:
+    return "0 porções"
+
+  porcoes = pesoPorcao / pesoAnvisa
+
+  def pluralComContagem(valor):
+    inteiro = round(valor)
+    return f"{inteiro} {'porção' if inteiro == 1 else 'porções'}"
+
+  if abs(porcoes - round(porcoes)) < 0.001:
+    return pluralComContagem(porcoes)
+
+  if porcoes > 3:
+    return f"Cerca de {pluralComContagem(porcoes)}"
+
+  oitavos = round(porcoes * 8)
+  inteiro, resto = divmod(oitavos, 8)
+  fracoesTexto = {1: "1/8", 2: "1/4", 3: "3/8", 4: "1/2", 5: "5/8", 6: "3/4", 7: "7/8"}
+  if resto == 0:
+    return pluralComContagem(inteiro)
+  if inteiro == 0:
+    return f"{fracoesTexto[resto]} porção"
+  return f"{inteiro} e {fracoesTexto[resto]} porções"
+
 # Função utilizada pelas views (e pelos signals) que atualiza a tabela. Necessario qdo há troca de valores em outras tabelas.
 def attTabela(tabela, itensDaReceita, ficha):
 
