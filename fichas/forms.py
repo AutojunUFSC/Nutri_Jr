@@ -37,12 +37,14 @@ class FichaFiltroForm(forms.Form):
 class ReceitaForm(forms.ModelForm):
   class Meta:
     model = Ficha_Ingrediente
-    fields = ['pesoBruto', 'pesoLiquido', 'medidaCaseira', 'quantidadeMedidaCaseira', 'nomeFantasia']
+    fields = ['pesoBruto', 'pesoLiquido', 'medidaCaseira', 'nomeFantasia']
     labels = {'pesoBruto': _('Peso Bruto:'),
               'pesoLiquido': _('Peso Líquido:'),
               'medidaCaseira': _('Medida Caseira:'),
-              'quantidadeMedidaCaseira': _('Quantidade:'),
               'nomeFantasia': _('Nome Fantasia:')}
+    help_texts = {
+      'medidaCaseira': _('Apenas texto (ex.: "colher de sopa"), não número.'),
+    }
 
 # Formulário para adicionar nutrientes extras na tabela nutricional
 class NutrienteForm(forms.ModelForm):

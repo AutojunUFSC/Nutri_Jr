@@ -41,11 +41,7 @@
             {% if item.medidaCaseira != None %}
                 <label class="control-label">Medida Caseira:</label>
                 <input class="form-control" type="text"    id="medidaCaseira" name="medidaCaseira" value="{{ item.medidaCaseira }}">
-                <br>
-            {% endif %}
-            {% if item.quantidadeMedidaCaseira != None %}
-                <label class="control-label">Quantidade:</label>
-                <input class="form-control" type="number"    id="quantidadeMedidaCaseira" name="quantidadeMedidaCaseira" value="{{ item.quantidadeMedidaCaseira }}">
+                <small class="form-text text-muted">Apenas texto (ex.: "colher de sopa"), não número.</small>
                 <br>
             {% endif %}
                     

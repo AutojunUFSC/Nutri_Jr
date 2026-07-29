@@ -670,7 +670,6 @@ class Ficha_Ingrediente(models.Model):
   pesoBruto = models.FloatField(null=True, blank=True, default=0)
   pesoLiquido = models.FloatField(null=True, blank=True, default=0)
   medidaCaseira = models.CharField(max_length=30, blank=True)  # Nome da unidade. Ex: xíc, sachê
-  quantidadeMedidaCaseira = models.FloatField(null=True, blank=True, default=0)  # Quantidade de medidaCaseira. Ex: 3 (em "3 xíc")
   nomeFantasia = models.CharField(max_length=50)
 
   # Visualização:
