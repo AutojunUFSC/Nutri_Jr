@@ -98,8 +98,9 @@
           $nova_chave_form[0].reset();
         }
         function handleError(data){
-          console.log(data)
-          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+data.responseJSON.ajax_message+'</div>'
+          console.log(data);
+          var msg = (data.responseJSON && data.responseJSON.ajax_message) ? data.responseJSON.ajax_message : 'Erro ao alterar a chave.';
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+msg+'</div>';
         }
       });
 
@@ -119,7 +120,9 @@
           $troca_senha_form[0].reset();
         }
         function handleError(data){
-          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+data.responseJSON.ajax_message+'</div>';
+          console.log(data);
+          var msg = (data.responseJSON && data.responseJSON.ajax_message) ? data.responseJSON.ajax_message : 'Erro ao alterar a senha.';
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+msg+'</div>';
         }
       });
       
@@ -140,8 +143,8 @@
         }
         function handleError(data){
           console.log(data);
-          console.log(data.responseJSON.form_errors);
-          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+data.responseJSON.form_errors+'</div>';
+          var msg = (data.responseJSON && (data.responseJSON.form_errors || data.responseJSON.ajax_message)) ? (data.responseJSON.form_errors || data.responseJSON.ajax_message) : 'Erro ao excluir membro.';
+          document.getElementById("mensagens").innerHTML = '<div class="alert alert-danger">'+msg+'</div>';
         }
       });
     });

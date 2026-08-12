@@ -1059,60 +1059,64 @@ def listaMembros(request):
 
     return render(request, 'usuarios_registrados.html', {'membros': membros, 'chave': chave, 'eh_admin': eh_admin, 'form': form, 'form_troca_senha': form_troca_senha, 'form_apaga_membro': form_apaga_membro})
  
+@login_required(login_url='loginUser')
 def mudaChave(request):
-  form = ChaveForm()
-  if request.is_ajax():
+  if request.user.username != 'admin':
+    return JsonResponse({'ajax_message': 'Apenas o administrador pode alterar a chave.'}, status=403)
+  if request.method == 'POST':
     form = ChaveForm(request.POST)
     if form.is_valid():
       form.save()
-
       data = {
         'ajax_message': 'Chave alterada com sucesso!',
-        'nova_chave': request.POST['key']
+        'nova_chave': request.POST.get('key', '')
       }
-      response = JsonResponse(data)
-      return response
+      return JsonResponse(data)
     else:
       data = {
         'ajax_message': 'A chave não pôde ser alterada!'
       }
-      response = JsonResponse(data)
-      response.status_code = 403
-      return response
+      return JsonResponse(data, status=400)
+  return JsonResponse({'ajax_message': 'Método não permitido.'}, status=405)
 
+@login_required(login_url='loginUser')
 def trocaSenha(request):
-  form = MudarSenha()
-  if request.is_ajax():
+  if request.user.username != 'admin':
+    return JsonResponse({'ajax_message': 'Apenas o administrador pode alterar senhas.'}, status=403)
+  if request.method == 'POST':
     form = MudarSenha(request.POST)
     if form.is_valid():
       nova_senha = form.cleaned_data['nova_senha']
-      encryption = make_password(nova_senha)
-      aux = form.cleaned_data['usuario']
-      membro = Membro.objects.get(nome=aux)
-      usuario = User.objects.get(membro=membro)
-      usuario.password = encryption
-      usuario.save()
+      usuario_obj = form.cleaned_data['usuario']
+      usuario_obj.set_password(nova_senha)
+      usuario_obj.save()
 
       data = {
-        'ajax_message': 'Senha de '+membro.nome+' alterada com sucesso!',
+        'ajax_message': f'Senha de {usuario_obj.username} alterada com sucesso!',
       }
-      response = JsonResponse(data)
-      return response
+      return JsonResponse(data)
     else:
       data = {
         'ajax_message': 'A senha não pode ser alterada!'
       }
-      response = JsonResponse(data)
-      response.status_code = 403
-      return response
+      return JsonResponse(data, status=400)
+  return JsonResponse({'ajax_message': 'Método não permitido.'}, status=405)
 
+@login_required(login_url='loginUser')
 def deletaMembro(request):
-  form = ApagarMembro()
-  if request.is_ajax():
+  if request.user.username != 'admin':
+    return JsonResponse({'ajax_message': 'Apenas o administrador pode excluir membros.', 'form_errors': 'Apenas o administrador pode excluir membros.'}, status=403)
+  if request.method == 'POST':
     form = ApagarMembro(request.POST)
     if form.is_valid():
       membroExcluido = form.cleaned_data['membroExcluido']
       membroDestino = form.cleaned_data['membroDestino']
+
+      try:
+        if hasattr(membroExcluido, 'usuario') and membroExcluido.usuario and membroExcluido.usuario.username == 'admin':
+          return JsonResponse({'ajax_message': 'O usuário admin não pode ser excluído!', 'form_errors': 'O usuário admin não pode ser excluído!'}, status=400)
+      except User.DoesNotExist:
+        pass
 
       ingredientesTrasnferencia = Ingrediente.objects.filter(autorIng=membroExcluido)
       numIT = ingredientesTrasnferencia.count()
@@ -1126,31 +1130,36 @@ def deletaMembro(request):
         ficha.autor = membroDestino
         ficha.save()
 
-      usuarioExcluido = membroExcluido.usuario
-      usuarioExcluido.delete()
+      nome_excluido = membroExcluido.nome
+      nome_destino = membroDestino.nome
+
+      try:
+        usuarioExcluido = membroExcluido.usuario
+        if usuarioExcluido:
+          usuarioExcluido.delete()
+        else:
+          membroExcluido.delete()
+      except (User.DoesNotExist, AttributeError):
+        membroExcluido.delete()
       
-      ajax_mes = 'Transferidos '+str(numFT)+' fichas e '+str(numIT)+' ingredientes de '+membroExcluido.nome+' para '+membroDestino.nome+'!'
+      ajax_mes = f'Transferidos {numFT} fichas e {numIT} ingredientes de {nome_excluido} para {nome_destino}!'
       data = {
         'ajax_message': ajax_mes,
       }
-      response = JsonResponse(data)
-      return response
+      return JsonResponse(data)
     else:
       # Transforma erros dos campos em uma string pra devolver no JSON
-      strErros = ''
-      for key in form.errors:
-        if strErros != '':
-          strErros += '; '
-        campo = form.fields[key].label
-        erro = form.errors[key][0]
-        strErros = "Erro no campo <b>"+campo+"</b>: "+erro
+      strErros = []
+      for key, error_list in form.errors.items():
+        campo = form.fields[key].label if key in form.fields else key
+        strErros.append(f"Erro no campo <b>{campo}</b>: {error_list[0]}")
       data = {
         'ajax_message': 'O membro não pode ser excluído!',
-        'form_errors': strErros
+        'form_errors': '; '.join(strErros) if strErros else 'Formulário inválido.'
       }
-      response = JsonResponse(data)
-      response.status_code = 403
-      return response
+      return JsonResponse(data, status=400)
+  return JsonResponse({'ajax_message': 'Método não permitido.', 'form_errors': 'Método não permitido.'}, status=405)
+
 
 # Ativada pela URL 'registrarMembro'. Faz formulário de novo membro e salva no BD se tiver a chave de segurança 
 def registrarMembro(request):

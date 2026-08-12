@@ -139,20 +139,29 @@ class ChaveForm(forms.ModelForm):
 
 # Formulário para mudar a senha de um usuário (só o admin tem acesso)
 class MudarSenha(forms.Form):
-  choices = User.objects.all().order_by(Lower('username'))
-  usuario = forms.ModelChoiceField(label=("Membro"), required=True, queryset=choices) # Excluir admin ou algum outro usuário?
-  nova_senha = forms.CharField(label=("Nova senha"), required=True, widget=forms.PasswordInput)
+  usuario = forms.ModelChoiceField(label=_("Membro"), required=True, queryset=User.objects.none())
+  nova_senha = forms.CharField(label=_("Nova senha"), required=True, widget=forms.PasswordInput)
+
+  def __init__(self, *args, **kwargs):
+    super(MudarSenha, self).__init__(*args, **kwargs)
+    self.fields['usuario'].queryset = User.objects.all().order_by(Lower('username'))
 
 # Formulário para apagar um membro transferindo os dados para outro
 class ApagarMembro(forms.Form):
-  choices = Membro.objects.all().order_by(Lower('nome'))
-  membroExcluido = forms.ModelChoiceField(required=True, label=("Excluir membro"), queryset=choices)
-  membroDestino = forms.ModelChoiceField(required=True, label=("Transferir autoria para"), queryset=choices, help_text="Isso inclui Fichas e Ingredientes criados por ele")
+  membroExcluido = forms.ModelChoiceField(required=True, label=_("Excluir membro"), queryset=Membro.objects.none())
+  membroDestino = forms.ModelChoiceField(required=True, label=_("Transferir autoria para"), queryset=Membro.objects.none(), help_text=_("Isso inclui Fichas e Ingredientes criados por ele"))
+
+  def __init__(self, *args, **kwargs):
+    super(ApagarMembro, self).__init__(*args, **kwargs)
+    self.fields['membroExcluido'].queryset = Membro.objects.all().order_by(Lower('nome'))
+    self.fields['membroDestino'].queryset = Membro.objects.all().order_by(Lower('nome'))
 
   def clean(self):
     cleaned_data = super().clean()
     mExcluido = cleaned_data.get("membroExcluido")
     mDestino = cleaned_data.get("membroDestino")
 
-    if mExcluido == mDestino:
+    if mExcluido and mDestino and mExcluido == mDestino:
       raise forms.ValidationError({'membroDestino': "Os dois membros precisam ser distintos"})
+    return cleaned_data
+
